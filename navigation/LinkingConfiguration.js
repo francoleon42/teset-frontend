@@ -11,14 +11,24 @@ export default {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          HomeTab: {
             screens: {
-              TabOneScreen: "one",
+              HomeScreen: "Inicio",
             },
           },
-          TabTwo: {
+          NewsTab: {
             screens: {
-              TabTwoScreen: "two",
+              NewsScreen: "Novedades",
+            },
+          },
+          ShopsTab: {
+            screens: {
+              ShopsScreen: "Comercios",
+            },
+          },
+          ContactTab: {
+            screens: {
+              ContactScreen: "Contacto",
             },
           },
         },
