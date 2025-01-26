@@ -1,5 +1,6 @@
-// If you are not familiar with React Navigation, check out the "Fundamentals" guide:
-// https://reactnavigation.org/docs/getting-started
+import SingInScreen from "../screens/Auth/SignInScreen";
+import VerifyCodeScreen from "../screens/Progress/CodigoVerificacion";
+
 import {
   DarkTheme,
   DefaultTheme,
@@ -22,13 +23,16 @@ export default function Navigation({ colorScheme }) {
   );
 }
 
-// A root stack navigator is often used for displaying modals on top of all other content
-// Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      initialRouteName="SignIn" 
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="SignIn" component={SingInScreen} />
+      <Stack.Screen name="VerifyCodeScreen" component={VerifyCodeScreen} />  
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen
         name="NotFound"

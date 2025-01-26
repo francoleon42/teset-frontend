@@ -1,23 +1,40 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { loginStepTwo } from '../../servicios/authService';
 
-export default function VerifyCodeScreen({ navigation }) {
-  const [code, setCode] = useState('');
+// Login Step Two
+export default function VerifyCodeScreen({ route, navigation }) {
+  const [code, setCode] = useState("");
+  const { email } = route.params;
 
-  const handleSubmit = () => {
-    // Verificar que el código tiene 4 dígitos
-    if (code.length !== 4) {
-      Alert.alert('Error', 'El código debe tener 4 dígitos.');
-      return;
-    }
+  
+  
 
-    // Lógica para verificar el código (en un proyecto real, aquí iría la llamada a la API)
-    if (code === '1234') {  // Este es un código simulado
+  const handleSubmit = async () => {
+    
+    try {
+      console.log('Email:', email);
+      console.log('Code:', code);
+      
+      const requestData = {
+        codigo: code,
+        username: email,
+        codDispositivo: 'codigoNuevod', 
+      };
+      
+      const response = await loginStepTwo(requestData);
+      
+      if(response.role =="CLIENTE"){
+        navigation.navigate('Root');
+      }
+      // Lógica después de la verificación
       Alert.alert('Éxito', 'Correo verificado con éxito.', [
-        { text: 'OK', onPress: () => navigation.navigate('Login') }, // Redirigir al login
+        { text: 'OK', onPress: () => navigation.navigate('Login') },
       ]);
-    } else {
-      Alert.alert('Error', 'Código incorrecto. Por favor, intenta nuevamente.');
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intenta más tarde.');
+      console.error('Login error:', error);
+      return; // Evita continuar si hay un error
     }
   };
 
@@ -31,7 +48,7 @@ export default function VerifyCodeScreen({ navigation }) {
         value={code}
         onChangeText={setCode}
         keyboardType="numeric"
-        maxLength={4}  // Limitar a 4 dígitos
+        maxLength={5} // Limitar a 4 dígitos
         autoFocus
       />
 

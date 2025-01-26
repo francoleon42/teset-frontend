@@ -1,25 +1,80 @@
-import { color } from '@rneui/themed/dist/config';
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
+import { loginStepOne, loginStepTwo } from '../../servicios/authService'; // Importa tu servicio
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+// Definir el tipo de parámetros de las pantallas
+type RootStackParamList = {
+  SignIn: undefined;
+  VerifyCodeScreen: { email: string  }; // Definir los parámetros correctos aquí
+  Root: undefined;
+  NotFound: undefined;
+};
+
+// Definir el tipo de navegación para tu pantalla
+type NavigationProp = StackNavigationProp<RootStackParamList, 'SignIn'>;
 
 const SingInScreen = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleLogin = () => {
+  // Usamos el hook useNavigation
+  const navigation = useNavigation<NavigationProp>();
+
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Por favor, ingrese ambos campos');
       return;
     }
+
     setLoading(true);
 
-    // Aquí agregarías tu lógica de autenticación (API, validaciones, etc.)
-    setTimeout(() => {
+    try {
+      const requestloginStepOne = {
+        username: email,
+        password,
+        codDispositivo: "codigoBoostrap",
+      };
+
+      const response = await loginStepOne(requestloginStepOne);
+      console.log(response);
+      if (response) {
+      
+        Alert.alert('Bienvenido', `Hola, ${email}`);
+        // Ahora pasa el parámetro correctamente
+        if(response.nuevoDispositivo){
+          console.log("Estoy desde dispositivo nuevo");
+          navigation.navigate('VerifyCodeScreen', { email });
+        }else {
+          const requestloginStepTwo = {
+            codigo: "12345",
+            username: email,
+            codDispositivo: "codigoBoostrap", 
+          };
+          
+          
+          const response = await loginStepTwo(requestloginStepTwo);
+          // se le pega a los dos enpoints
+          console.log("Estoy desde dispositivo viejo");
+          console.log(response);
+
+          if(response.role =="CLIENTE"){
+            navigation.navigate('Root');
+          }
+        }
+
+      } else {
+        Alert.alert('Error', response?.message || 'Algo salió mal');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intenta más tarde.');
+      console.error('Login error:', error);
+    } finally {
       setLoading(false);
-      Alert.alert('Bienvenido', `Hola, ${email}`);
-    }, 2000);
+    }
   };
 
   const handleForgotPassword = () => {
@@ -33,7 +88,7 @@ const SingInScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Hola, Bienvenido! 👋</Text>
-      <Text style={styles.subTitle}>Teset - Prestamos Personales</Text>
+      <Text style={styles.subTitle}>Test - Prestamos Personales</Text>
 
       {/* Input para correo electrónico */}
       <TextInput
@@ -54,8 +109,8 @@ const SingInScreen = () => {
         secureTextEntry
       />
 
-          {/* Botón para 'Olvidé mi contraseña' */}
-          <TouchableOpacity onPress={handleForgotPassword}>
+      {/* Botón para 'Olvidé mi contraseña' */}
+      <TouchableOpacity onPress={handleForgotPassword}>
         <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
 
@@ -70,11 +125,11 @@ const SingInScreen = () => {
         Ingresar
       </Button>
 
-
-
       {/* Botón para registrarse */}
       <TouchableOpacity onPress={handleRegister}>
-        <Text style={styles.register}>¿No tienes una cuenta? <Text style={{color:'#11ae40'}}>Regístrate</Text></Text>
+        <Text style={styles.register}>
+          ¿No tienes una cuenta? <Text style={{ color: '#11ae40' }}>Regístrate</Text>
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -118,7 +173,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 15,
     color:'#ffffff',
-    backgroundColor: '#11ae40', 
+    backgroundColor: '#11ae40',
   },
   forgotPassword: {
     color: '#000000',
