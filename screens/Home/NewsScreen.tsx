@@ -1,46 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {StyleSheet, StatusBar, View, Image, SectionList, Pressable, Linking, SafeAreaView, Platform} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { getNovedades } from '../../servicios/negocioService';
 
-export default function NewsScreen() {
 
-  const imagenesNovedades = [
-    {
-      title: 'https://www.solodeportes.com.ar',
-      data: ['https://media2.solodeportes.com.ar/media/slider/slide/18291311_CAI_Training_1920x540_copia.webp'],
-      comercioUrl: 'https://www.solodeportes.com.ar',
-    },
-    {
-      title: 'https://www.solodeportes.com.ar',
-      data:['https://media2.solodeportes.com.ar/media/slider/slide/08410911_Solo_Deportes_Desktop_BTS_copia.webp'],
-      comercioUrl: 'https://www.solodeportes.com.ar',
-    },
-    {
-      title: 'https://www.solodeportes.com.ar',
-      data: ['https://media2.solodeportes.com.ar/media/slider/slide/09042610_desktop.webp'],
-      comercioUrl: 'https://www.solodeportes.com.ar',
-    },
-    {
-      title: 'https://www.solodeportes.com.ar',
-      data: ['https://media2.solodeportes.com.ar/media/slider/slide/18311211_DESKTOP.webp'],
-      comercioUrl: 'https://www.solodeportes.com.ar',
-    },
-    {
-      title: 'https://www.solodeportes.com.ar',
-      data: ['https://media2.solodeportes.com.ar/media/slider/slide/12361208_SD_Banner_desktop.webp'],
-      comercioUrl: 'https://www.solodeportes.com.ar',
-    },
-    {
-      title: 'https://www.solodeportes.com.ar',
-      data: ['https://media2.solodeportes.com.ar/media/slider/slide/18501010_MPQ4_SOLODEPORTES_HomeBannerDesktop_1920x540_copia.webp'],
-      comercioUrl: 'https://www.solodeportes.com.ar',
-    },
-    {
-      title: 'https://www.solodeportes.com.ar',
-      data: ['https://media2.solodeportes.com.ar/media/slider/slide/16112509_SD_Desktop.webp'],
-      comercioUrl: 'https://www.solodeportes.com.ar',
-    }
-  ];
+export default function NewsScreen({ route }) {
+  const { token } = route.params;
+  const [useToken, setToken] = useState<string>(token);
+  const [novedades, setNovedades] = useState<any>(null);
+  useEffect(() => {
+    const fetchNovedades = async () => {
+      try {
+        const response = await getNovedades(token);
+        setNovedades(response); 
+      } catch (error) {
+        console.error('Error obteniendo datos del cliente:', error);
+      }
+    };
+
+    fetchNovedades();
+
+  }, [token]);
+
+  const novedadesSections = novedades ? novedades.map((novedad) => ({
+    title: novedad.titulo,  
+    data: [novedad.linkImagen],      
+    comercioUrl: novedad.linkComercio,
+  })) : [];
 
   return (
     <View className='flex-1 bg-[#f5f5f5]'>
@@ -48,7 +34,7 @@ export default function NewsScreen() {
         <SafeAreaView className='bg-[#11ae40]' >
       <View className='bg-[#f5f5f5]' style={{paddingBottom:5}}></View>
         <SectionList
-          sections={imagenesNovedades}
+          sections={novedadesSections}
           renderItem={({item, section}) => (
             <View className='bg-[#f5f5f5]' style={{paddingBottom:10}}>
               <Pressable onPress={() => 

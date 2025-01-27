@@ -25,7 +25,8 @@ export default function VerifyCodeScreen({ route, navigation }) {
       const response = await loginStepTwo(requestData);
       
       if(response.role =="CLIENTE"){
-        navigation.navigate('Root');
+        console.log("TOKEN:",response.token);
+        navigation.navigate('Root',{ token: response.token });
       }
       // Lógica después de la verificación
       Alert.alert('Éxito', 'Correo verificado con éxito.', [

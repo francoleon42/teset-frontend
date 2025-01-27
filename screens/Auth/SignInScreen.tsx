@@ -8,8 +8,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 // Definir el tipo de parámetros de las pantallas
 type RootStackParamList = {
   SignIn: undefined;
-  VerifyCodeScreen: { email: string  }; // Definir los parámetros correctos aquí
-  Root: undefined;
+  VerifyCodeScreen: { email: string  };
+  Root: { token: string };
   NotFound: undefined;
 };
 
@@ -39,13 +39,13 @@ const SingInScreen = () => {
         codDispositivo: "codigoBoostrap",
       };
 
-      const response = await loginStepOne(requestloginStepOne);
-      console.log(response);
-      if (response) {
+      const responseOne = await loginStepOne(requestloginStepOne);
+      console.log(responseOne);
+      if (responseOne) {
       
         Alert.alert('Bienvenido', `Hola, ${email}`);
         // Ahora pasa el parámetro correctamente
-        if(response.nuevoDispositivo){
+        if(responseOne.nuevoDispositivo){
           console.log("Estoy desde dispositivo nuevo");
           navigation.navigate('VerifyCodeScreen', { email });
         }else {
@@ -56,18 +56,16 @@ const SingInScreen = () => {
           };
           
           
-          const response = await loginStepTwo(requestloginStepTwo);
-          // se le pega a los dos enpoints
-          console.log("Estoy desde dispositivo viejo");
-          console.log(response);
-
-          if(response.role =="CLIENTE"){
-            navigation.navigate('Root');
+          const responseTwo = await loginStepTwo(requestloginStepTwo);
+         
+          if(responseTwo.role =="CLIENTE"){
+            console.log("TOKEN:",responseTwo.token);
+            navigation.navigate('Root', { token: responseTwo.token });
           }
         }
 
       } else {
-        Alert.alert('Error', response?.message || 'Algo salió mal');
+        Alert.alert('Error', responseOne?.message || 'Algo salió mal');
       }
     } catch (error) {
       Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intenta más tarde.');

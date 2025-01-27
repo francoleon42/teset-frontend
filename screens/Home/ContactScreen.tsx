@@ -1,138 +1,71 @@
-import React from 'react';
-import {StyleSheet, Text, ScrollView, StatusBar, View, Linking, Pressable, TouchableOpacity, Platform, SafeAreaView} from 'react-native';
-import { ListItem, Avatar } from '@rneui/themed'
-import Animated from 'react-native-reanimated';
-import { useEffect, useState } from 'react';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Emoji } from '../../components/Emoji/Emoji';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, ScrollView, View, Linking, Pressable, SafeAreaView,StatusBar,TouchableOpacity,Platform } from 'react-native';
+import { ListItem, Avatar } from '@rneui/themed';
+import { getContactos } from '../../servicios/negocioService';
 
-export default function ContactScreen() {
 
-  let hours = new Date().getHours();
-    const [esDia, setEsDia] = useState(false);
-    const [esTarde, setEsTarde] = useState(false);
-    const [esNoche, setEsNoche] = useState(false);
-  
-    useEffect(() => {
-      if (hours >= 5 && hours < 13) {
-        setEsDia(true);
-      } else if (hours >= 13 && hours < 19){
-        setEsTarde(true);
-      } else if (hours >= 19 || hours < 5){
-        setEsNoche(true);
+export default function ContactScreen({ route }) {
+
+  const { token } = route.params;
+  const [contactos, setContactos] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchContactos = async () => {
+      try {
+        const response = await getContactos(token);
+        setContactos(response);
+      } catch (error) {
+        console.error('Error obteniendo contactos:', error);
       }
-    }, [hours]);
+    };
 
-  const redesSociales = [
-    {
-      name: 'Facebook',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png',
-      subtitle: 'facebook.com/teset',
-      link: '',
-    },
-    {
-      name: 'Instagram',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1200px-Instagram_logo_2016.svg.png',
-      subtitle: '@teset',
-      link: '',
-    },
-  ];
+    fetchContactos();
+  }, [token]);
 
-  const numerosWhatsApp = [
-    {
-      name: '11-3060-4587',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/767px-WhatsApp.svg.png',
-      subtitle: 'Prestamos',
-      link: '',
-    },
-    {
-      name: '11-3060-4587',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/767px-WhatsApp.svg.png',
-      subtitle: 'Deudas y Pagos',
-      link: '',
-    },
-  ];
-
-  const numerosTelefonos = [
-    {
-      name: '15-3000-4000',
-      logo: 'https://cdn.pixabay.com/photo/2017/01/10/03/54/icon-1968244_1280.png',
-      subtitle: 'Nuevos prestamos',
-      link: '',
-    },
-    {
-      name: '15-3000-4000',
-      logo: 'https://cdn.pixabay.com/photo/2017/01/10/03/54/icon-1968244_1280.png',
-      subtitle: 'Nuevos prestamos',
-      link: '',
-    },
-  ];
+  const renderContacto = (contacto: any, index: number) => {
+    const { tipo, titulo, subTitulo, logoLink, link } = contacto;
+    return (
+      <Pressable onPress={() => Linking.openURL(link)} key={index}>
+        <ListItem bottomDivider>
+          <Avatar rounded source={{ uri: logoLink }} />
+          <ListItem.Content>
+            <ListItem.Title>{titulo}</ListItem.Title>
+            <ListItem.Subtitle>{subTitulo}</ListItem.Subtitle>
+          </ListItem.Content>
+        </ListItem>
+      </Pressable>
+    );
+  };
 
   return (
+    <View style={styles.container}>
+      <SafeAreaView style={styles.droidSafeArea}>
+        <ScrollView>
+          {/* Sección Redes Sociales */}
+          {contactos && contactos.filter(contacto => contacto.tipo === 'REDES_SOCIALES').length > 0 && (
+            <>
+              <Text style={styles.titleText}>Redes Sociales</Text>
+              {contactos.filter(contacto => contacto.tipo === 'REDES_SOCIALES').map(renderContacto)}
+            </>
+          )}
 
-    <View className='flex-1 bg-[#f5f5f5]'>
-      <SafeAreaProvider style={styles.droidSafeArea}>
-        <SafeAreaView className='bg-[#11ae40]'>
-        <View className='bg-[#f5f5f5]'></View>
-          <ScrollView className='bg-[#ffffff]'>
-            
-          <Text style={styles.titleText}>Redes Sociales</Text>
-              {redesSociales.map((redSocial, index) => {
-                return (
-                  <Pressable 
-                    onPress={()=> Linking.openURL(redSocial.link)}
-                    key={index} 
-                  >
-                    <ListItem className='bg-[#f5f5f5]' key={index} bottomDivider>
-                      <Avatar rounded source={{uri: redSocial.logo}} />
-                      <ListItem.Content>
-                        <ListItem.Title>{redSocial.name}</ListItem.Title>
-                        <ListItem.Subtitle>{redSocial.subtitle}</ListItem.Subtitle>
-                      </ListItem.Content>
-                    </ListItem>
-                  </Pressable>
-                );
-              })}
+          {/* Sección WhatsApp */}
+          {contactos && contactos.filter(contacto => contacto.tipo === 'WHATSAPP').length > 0 && (
+            <>
+              <Text style={styles.titleText}>Numeros WhatsApp</Text>
+              {contactos.filter(contacto => contacto.tipo === 'WHATSAPP').map(renderContacto)}
+            </>
+          )}
 
-          <Text style={styles.titleText}>Numeros WhatsApp</Text>
-              {numerosWhatsApp.map((numeroWhatsApp, index) => {
-                return (
-                  <Pressable 
-                    onPress={()=> Linking.openURL(numeroWhatsApp.link)}
-                    key={index} 
-                  >
-                    <ListItem key={index} bottomDivider>
-                      <Avatar rounded source={{uri: numeroWhatsApp.logo}} />
-                      <ListItem.Content>
-                        <ListItem.Title>{numeroWhatsApp.name}</ListItem.Title>
-                        <ListItem.Subtitle>{numeroWhatsApp.subtitle}</ListItem.Subtitle>
-                      </ListItem.Content>
-                    </ListItem>
-                  </Pressable>
-                );
-              })}
-
-          <Text style={styles.titleText}>Numeros Telefonicos</Text>
-              {numerosTelefonos.map((numeroTelefono, index) => {
-                return (
-                  <Pressable 
-                    onPress={()=> Linking.openURL(numeroTelefono.link)}
-                    key={index} 
-                  >
-                    <ListItem key={index} bottomDivider>
-                      <Avatar rounded source={{uri: numeroTelefono.logo}} />
-                      <ListItem.Content>
-                        <ListItem.Title>{numeroTelefono.name}</ListItem.Title>
-                        <ListItem.Subtitle>{numeroTelefono.subtitle}</ListItem.Subtitle>
-                      </ListItem.Content>
-                    </ListItem>
-                  </Pressable>
-                );
-              })}
-          </ScrollView>
-        </SafeAreaView>
-      </SafeAreaProvider>
+          {/* Sección Teléfonos */}
+          {contactos && contactos.filter(contacto => contacto.tipo === 'TELEFONO').length > 0 && (
+            <>
+              <Text style={styles.titleText}>Numeros Telefonicos</Text>
+              {contactos.filter(contacto => contacto.tipo === 'TELEFONO').map(renderContacto)}
+            </>
+          )}
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }
@@ -150,6 +83,8 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   titleText: {
+    width: "100%",
+    textAlign: "center",
     fontSize: 15,
     paddingVertical: 5,
     color: "black",

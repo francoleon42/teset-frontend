@@ -14,8 +14,14 @@ import ShopsScreen from "../screens/Home/ShopsScreen";
 
 const BottomTab = createBottomTabNavigator();
 
-export default function BottomTabNavigator() {
+export default function BottomTabNavigator({ route }) {
   const colorScheme = useColorScheme();
+  const token = route?.params?.token; // Recibe el token desde la ruta 'Root'
+
+  // Validar si el token está presente
+  if (!token) {
+    console.error("El token no fue pasado correctamente a BottomTabNavigator");
+  }
 
   return (
     <BottomTab.Navigator
@@ -25,6 +31,7 @@ export default function BottomTabNavigator() {
       <BottomTab.Screen
         name="Inicio"
         component={HomeScreen}
+        initialParams={{ token }} 
         options={{
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
@@ -35,6 +42,7 @@ export default function BottomTabNavigator() {
       <BottomTab.Screen
         name="Novedades"
         component={NewsScreen}
+        initialParams={{ token }} 
         options={{
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
@@ -45,6 +53,7 @@ export default function BottomTabNavigator() {
        <BottomTab.Screen
         name="Comercios"
         component={ShopsScreen}
+        initialParams={{ token }} 
         options={{
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
@@ -55,6 +64,7 @@ export default function BottomTabNavigator() {
       <BottomTab.Screen
         name="Contacto"
         component={ContactScreen}
+        initialParams={{ token }} 
         options={{
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
