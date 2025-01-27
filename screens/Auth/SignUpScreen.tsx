@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { View, StyleSheet, Text, Alert, TouchableOpacity, TextInput } from 'react-native';
+import { Button } from 'react-native-paper';
 
-
-// registroStepTwo
 const SignUpScreen = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -75,7 +73,7 @@ const SignUpScreen = () => {
         Crear Cuenta
       </Button>
 
-      {/* Botón para registrarse */}
+      {/* Botón para terminos y condiciones */}
       <TouchableOpacity onPress={handleTerminos}>
         <Text style={styles.terminos}>Al registrarse estas aceptando los <Text style={{color:'#11ae40'}}>terminos y condiciones</Text> de uso.</Text>
       </TouchableOpacity>

@@ -25,12 +25,10 @@ export default function HomeScreen({ route }) {
     const fetchClientData = async () => {
       try {
         const responseClienteData = await getCliente(token);
-        setClientData(responseClienteData); // Guardar los datos en el estado
-        console.log('Datos del cliente:', responseClienteData);
+        setClientData(responseClienteData); 
 
         const responseClienteDetalle = await getClienteDetalle(token);
         setClientDetalle(responseClienteDetalle);
-        console.log('Detalles del cliente:', responseClienteDetalle);
 
       } catch (error) {
         console.error('Error obteniendo datos del cliente:', error);
