@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
+import { updatePasswordStepTwo } from '../../servicios/authService';
 
-const NewPasswordScreen = () => {
+
+//update step two
+const NewPasswordScreen = ({navigation, route}) => {
   const [verificationCode, setVerificationCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [email, setEmail] = useState('example@gmail.com');
+  
+ 
+  const { email,dni } = route.params;
 
-  const handleModifyPassword = () => {
+  const handleModifyPassword = async () => {
     if (!verificationCode || !newPassword || !confirmPassword) {
       Alert.alert('Error', 'Todos los campos son requeridos');
       return;
@@ -17,6 +22,19 @@ const NewPasswordScreen = () => {
     if (newPassword !== confirmPassword) {
       Alert.alert('Error', 'Las contraseñas no coinciden');
       return;
+    }
+
+    try {
+      const data = {
+        dni: dni,
+        newPassword:newPassword,
+        codigo: verificationCode
+      }
+      const response = await updatePasswordStepTwo(data);  
+      navigation.navigate('SignIn');
+    } catch (error) {
+      Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+      console.error('Login error:', error);
     }
 
     // Aquí iría la lógica para modificar la contraseña, por ejemplo, hacer una llamada a una API.

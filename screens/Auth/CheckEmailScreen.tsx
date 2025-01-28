@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
+import { updatePasswordStepOne } from '../../servicios/authService';
 
 //registro step one
 export default function CheckEmailScreen({ navigation }) {
   const [dni, setDni] = useState('');
 
-  const handleSubmit = () => {
-    // Aquí podrías agregar la lógica para enviar el enlace de recuperación de contraseña
-    if (dni) {
-      // Lógica de recuperación de contraseña (por ejemplo, a través de una API)
-      Alert.alert('Correo enviado', 'Hemos enviado un enlace para restablecer tu contraseña.', [{ text: 'OK' }]);
-      navigation.goBack(); // Vuelve a la pantalla anterior (Login)
-    } else {
-      Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
-    }
+  const handleSubmit = async () => {
+
   };
 
   return (

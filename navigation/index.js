@@ -1,5 +1,7 @@
 import SingInScreen from "../screens/Auth/SignInScreen";
 import CheckCodeScreen from "../screens/Auth/CheckCodeScreen";
+import ForgotPasswordScreen from "../screens/Auth/ForgotPasswordScreen";
+import NewPasswordScreen from "../screens/Auth/NewPasswordScreen"
 
 import {
   DarkTheme,
@@ -11,6 +13,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
+
 
 export default function Navigation({ colorScheme }) {
   return (
@@ -32,7 +35,9 @@ function RootNavigator() {
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="SignIn" component={SingInScreen} />
-      <Stack.Screen name="CheckCode" component={CheckCodeScreen} />  
+      <Stack.Screen name="CheckCode" component={CheckCodeScreen} /> 
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} /> 
+      <Stack.Screen name="NewPassword" component={NewPasswordScreen} /> 
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen
         name="NotFound"

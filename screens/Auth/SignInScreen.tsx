@@ -9,6 +9,8 @@ type RootStackParamList = {
   SignIn: undefined;
   CheckCode: { email: string };
   Root: { token: string };
+  ForgotPassword: undefined;
+  NewPassword:{ email:string, dni: string };
   NotFound: undefined;
 };
 
@@ -67,7 +69,7 @@ const SignInScreen = () => {
   };
 
   const handleForgotPassword = () => {
-    
+    navigation.navigate('ForgotPassword');
     Alert.alert('Recuperación de contraseña', 'Se enviará un enlace para recuperar tu contraseña al correo ingresado');
   };
 

@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
+import { updatePasswordStepOne } from '../../servicios/authService';
 
+
+//update step one 
 export default function ForgotPasswordScreen({ navigation }) {
   const [dni, setDni] = useState('');
 
-  const handleSubmit = () => {
-    // Aquí podrías agregar la lógica para enviar el enlace de recuperación de contraseña
-    if (dni) {
-      // Lógica de recuperación de contraseña (por ejemplo, a través de una API)
-      Alert.alert('Correo enviado', 'Hemos enviado un enlace para restablecer tu contraseña.', [{ text: 'OK' }]);
-      navigation.goBack(); // Vuelve a la pantalla anterior (Login)
-    } else {
+  const handleSubmit = async () => {
+    try {
+      const data = {
+        dni: dni
+      }
+      const response = await updatePasswordStepOne(data);
+      const email = response.username;
+      navigation.navigate('NewPassword',{ email,dni });
+
+    } catch (error) {
       Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+      console.error('Login error:', error);
     }
   };
 
@@ -30,13 +37,13 @@ export default function ForgotPasswordScreen({ navigation }) {
         autoCapitalize="none"
       />
 
-       <Button
-              mode="contained"
-              onPress={handleSubmit}
-              style={styles.button}
-            >
-              Enviar codigo
-            </Button>
+      <Button
+        mode="contained"
+        onPress={handleSubmit}
+        style={styles.button}
+      >
+        Enviar codigo
+      </Button>
 
     </View>
   );
@@ -63,25 +70,25 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   input: {
-    margin:5,
-    paddingBottom:5,
-    paddingTop:5,
-    textAlign:'left',
-    fontSize:16,
-    height:55,
-    borderRadius:15,
-    paddingHorizontal:40,
-    paddingLeft:30,
-    borderWidth:1,
-    borderColor:'#EBEBEB',
-    backgroundColor:'#FAFAFA',
+    margin: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+    textAlign: 'left',
+    fontSize: 16,
+    height: 55,
+    borderRadius: 15,
+    paddingHorizontal: 40,
+    paddingLeft: 30,
+    borderWidth: 1,
+    borderColor: '#EBEBEB',
+    backgroundColor: '#FAFAFA',
     marginBottom: 15,
   },
   button: {
     width: '100%',
     marginBottom: 15,
-    color:'#ffffff',
-    backgroundColor: '#11ae40', 
+    color: '#ffffff',
+    backgroundColor: '#11ae40',
   },
   buttonText: {
     color: '#fff',
