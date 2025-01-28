@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
-import { updatePasswordStepOne } from '../../servicios/authService';
+import { registroStepOne } from '../../servicios/authService';
 
 //registro step one
 export default function CheckEmailScreen({ navigation }) {
   const [dni, setDni] = useState('');
 
   const handleSubmit = async () => {
+    try {
+      const data = {
+        dni: dni
+      }
+      const response = await registroStepOne(data);
+      const email = response.username;
+      
+      navigation.navigate('SignUp',{ email});
 
+    } catch (error) {
+      Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+      console.error('Login error:', error);
+    }
   };
 
   return (

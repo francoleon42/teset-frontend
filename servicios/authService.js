@@ -25,9 +25,13 @@ export const updatePasswordStepTwo = async (data) => {
     return await executeFetch(endpoint, data, HttpMethods.PATCH, null, 200);
 };
 
-export const register = async (data, token) => {
-    const endpoint = backendUrl + '/auth/register';
+export const registroStepOne = async (data, token) => {
+    const endpoint = backendUrl + '/auth/register/step-one';
     return await executeFetch(endpoint, data, HttpMethods.POST, token, 201);
+};
+export const registroStepTwo = async (data, token) => {
+    const endpoint = backendUrl + '/auth/register/step-two';
+    return await executeFetch(endpoint, data, HttpMethods.PATCH, token, 200);
 };
 
 export const logout = async (token) => {
@@ -35,25 +39,3 @@ export const logout = async (token) => {
     return await executeFetch(endpoint, null, HttpMethods.POST, token, 200);
 };
 
-
-export const verAllUsers = async (token) => {
-    const endpoint = backendUrl + '/auth/getAllUsers';
-    return await executeFetch(endpoint, null, HttpMethods.GET, token, 200);
-};
-
-export const updateUser = async (data, id, token) => {
-    const endpoint = backendUrl + '/auth/update/' + id;
-    return await executeFetch(endpoint, data, HttpMethods.PUT, token, 201);
-};
-
-
-export const habilitarUsuario = async (id, token) => {
-    const endpoint = backendUrl + '/auth/habilitar/' + id;
-    return await executeFetch(endpoint, null, HttpMethods.PATCH, token, 200);
-};
-
-
-export const inhabilitarUsuario = async (id, token) => {
-    const endpoint = backendUrl + '/auth/inhabilitar/' + id;
-    return await executeFetch(endpoint, null, HttpMethods.PATCH, token, 200);
-};

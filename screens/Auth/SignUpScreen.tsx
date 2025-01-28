@@ -1,26 +1,37 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { Button } from 'react-native-paper';
+import { registroStepTwo } from '../../servicios/authService';
 
-const SignUpScreen = () => {
-  const [username, setUsername] = useState<string>('');
+//registro step two
+const SignUpScreen = ({ navigation, route }) => {
+
   const [password, setPassword] = useState<string>('');
   const [verificationCode, setVerificationCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSignUp = () => {
-    if (!username || !password || !verificationCode) {
+  const { email } = route.params;
+
+  const handleSignUp = async () => {
+    if (!password || !verificationCode) {
       Alert.alert('Error', 'Por favor, complete todos los campos.');
       return;
     }
 
-    setLoading(true);
+    try {
+      const data = {
+        username: email,
+        password: password,
+        codigo: verificationCode
+      }
+      const response = await registroStepTwo(data);
+      
+      navigation.navigate('SignIn');
 
-    // Simulación de la creación de la cuenta (aquí puedes agregar tu lógica real)
-    setTimeout(() => {
-      setLoading(false);
-      Alert.alert('¡Cuenta creada!', `Bienvenido, ${username}`);
-    }, 2000);
+    } catch (error) {
+      Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+      console.error('Login error:', error);
+    }
   };
 
   const handleTerminos = () => {
@@ -32,20 +43,11 @@ const SignUpScreen = () => {
       <Text style={styles.title}>Registrarse</Text>
       <Text style={styles.subTitle}>Por favor, ingresa los siguientes datos:</Text>
 
-      {/* Input para el nombre de usuario */}
-      <TextInput
-        style={styles.input}
-        placeholder="Usuario"
-        placeholderTextColor={'#929292'} 
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
-      />
 
       {/* Input para la contraseña */}
       <TextInput
         placeholder="Contraseña"
-        placeholderTextColor={'#929292'} 
+        placeholderTextColor={'#929292'}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -55,7 +57,7 @@ const SignUpScreen = () => {
       {/* Input para el código verificador */}
       <TextInput
         placeholder="Código Verificador"
-        placeholderTextColor={'#929292'} 
+        placeholderTextColor={'#929292'}
         value={verificationCode}
         onChangeText={setVerificationCode}
         style={styles.input}
@@ -75,7 +77,7 @@ const SignUpScreen = () => {
 
       {/* Botón para terminos y condiciones */}
       <TouchableOpacity onPress={handleTerminos}>
-        <Text style={styles.terminos}>Al registrarse estas aceptando los <Text style={{color:'#11ae40'}}>terminos y condiciones</Text> de uso.</Text>
+        <Text style={styles.terminos}>Al registrarse estas aceptando los <Text style={{ color: '#11ae40' }}>terminos y condiciones</Text> de uso.</Text>
       </TouchableOpacity>
 
     </View>
@@ -103,29 +105,29 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   input: {
-    margin:5,
-    paddingBottom:5,
-    paddingTop:5,
-    textAlign:'left',
-    fontSize:16,
-    height:55,
-    borderRadius:15,
-    paddingHorizontal:40,
-    paddingLeft:30,
-    borderWidth:1,
-    borderColor:'#EBEBEB',
-    backgroundColor:'#FAFAFA',
+    margin: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+    textAlign: 'left',
+    fontSize: 16,
+    height: 55,
+    borderRadius: 15,
+    paddingHorizontal: 40,
+    paddingLeft: 30,
+    borderWidth: 1,
+    borderColor: '#EBEBEB',
+    backgroundColor: '#FAFAFA',
   },
   button: {
     width: '100%',
     marginBottom: 15,
-    color:'#ffffff',
+    color: '#ffffff',
     backgroundColor: '#11ae40',
     marginTop: 10,
   },
   terminos: {
     color: '#808080',
-    textAlign:'center',
+    textAlign: 'center',
   },
 });
 

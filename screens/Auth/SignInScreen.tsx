@@ -11,6 +11,8 @@ type RootStackParamList = {
   Root: { token: string };
   ForgotPassword: undefined;
   NewPassword:{ email:string, dni: string };
+  CheckEmail:undefined;
+  SignUp:{ email: string };
   NotFound: undefined;
 };
 
@@ -74,6 +76,7 @@ const SignInScreen = () => {
   };
 
   const handleRegister = () => {
+    navigation.navigate('CheckEmail');
     Alert.alert('Registro', 'Serás redirigido a la pantalla de registro');
   };
 

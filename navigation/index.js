@@ -2,6 +2,10 @@ import SingInScreen from "../screens/Auth/SignInScreen";
 import CheckCodeScreen from "../screens/Auth/CheckCodeScreen";
 import ForgotPasswordScreen from "../screens/Auth/ForgotPasswordScreen";
 import NewPasswordScreen from "../screens/Auth/NewPasswordScreen"
+import SignUpScreen from "../screens/Auth/SignUpScreen"
+import CheckEmailScreen from "../screens/Auth/CheckEmailScreen"
+
+
 
 import {
   DarkTheme,
@@ -36,8 +40,15 @@ function RootNavigator() {
     >
       <Stack.Screen name="SignIn" component={SingInScreen} />
       <Stack.Screen name="CheckCode" component={CheckCodeScreen} /> 
+
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} /> 
       <Stack.Screen name="NewPassword" component={NewPasswordScreen} /> 
+
+
+      <Stack.Screen name="CheckEmail" component={CheckEmailScreen} /> 
+      <Stack.Screen name="SignUp" component={SignUpScreen} /> 
+      
+      
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen
         name="NotFound"
