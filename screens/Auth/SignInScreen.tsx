@@ -7,7 +7,7 @@ import { loginStepOne, loginStepTwo } from '../../servicios/authService';
 
 type RootStackParamList = {
   SignIn: undefined;
-  VerifyCodeScreen: { email: string };
+  CheckCode: { email: string };
   Root: { token: string };
   NotFound: undefined;
 };
@@ -41,7 +41,7 @@ const SignInScreen = () => {
       if (responseOne) {
         Alert.alert('Bienvenido', `Hola, ${email}`);
         if (responseOne.nuevoDispositivo) {
-          navigation.navigate('VerifyCodeScreen', { email });
+          navigation.navigate('CheckCode', { email });
         } else {
           const requestloginStepTwo = {
             codigo: '12345',
@@ -67,6 +67,7 @@ const SignInScreen = () => {
   };
 
   const handleForgotPassword = () => {
+    
     Alert.alert('Recuperación de contraseña', 'Se enviará un enlace para recuperar tu contraseña al correo ingresado');
   };
 

@@ -25,7 +25,7 @@ export default function HomeScreen({ route }) {
     const fetchClientData = async () => {
       try {
         const responseClienteData = await getCliente(token);
-        setClientData(responseClienteData); 
+        setClientData(responseClienteData);
 
         const responseClienteDetalle = await getClienteDetalle(token);
         setClientDetalle(responseClienteDetalle);
@@ -74,10 +74,12 @@ export default function HomeScreen({ route }) {
         <Slider />
         <StyleCard
           title={`$${clientData?.saldoCompras || '0'}`}
-          subtitle="SALDO EN COMPRAS 🛒"
+          subtitle="DISPONIBLE PARA COMPRAS 🛒"
           text="Podes ir a comprar a cualquier comercio adherido"
         />
-        <Card subtitle="RESUMEN DE CUENTA" text={`El total a pagar al  'N/A' es $ ${clientData?.totalAPagar || '0'}`} />
+        <Card subtitle="RESUMEN DE CUENTA" text={`- Saldo a pagar a la fecha es $ ${clientData?.totalAPagar || '0'} 
+        - Proximo vencimiento ${clientData?.fechaProximoVencimiento || '0/00/0000'} $${clientData?.importePxVto || '0'}`} />
+
         <TouchableOpacity style={styles.appButtonContainer} onPress={onShowAccountDetail}>
           <Text style={styles.appButtonText}>Ver detalle de cuenta</Text>
         </TouchableOpacity>
@@ -85,15 +87,25 @@ export default function HomeScreen({ route }) {
           <ScrollView style={styles.container}>
             <DataTable>
               <DataTable.Header>
-                <DataTable.Title>Fecha</DataTable.Title>
-                <DataTable.Title>Monto</DataTable.Title>
-                <DataTable.Title>Cuota</DataTable.Title>
+                <DataTable.Title>Fecha emision</DataTable.Title>
+                <DataTable.Title>CreditoNro</DataTable.Title>
+                <DataTable.Title>Comercio</DataTable.Title>
+                <DataTable.Title>Importe a pagar</DataTable.Title>
+                <DataTable.Title>Prox vencim</DataTable.Title>
               </DataTable.Header>
               {clientDetalle?.map((detalle, index) => (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell>{detalle.fecha}</DataTable.Cell>
+                  <DataTable.Cell>{detalle.fechaEmision}</DataTable.Cell>
+                  <DataTable.Cell>{detalle.secuencia}</DataTable.Cell>
+                  <DataTable.Cell>{detalle.codCom}</DataTable.Cell>
                   <DataTable.Cell>${detalle.importe.toFixed(2)}</DataTable.Cell>
-                  <DataTable.Cell>{detalle.cuota}</DataTable.Cell>
+                  <DataTable.Cell>
+                    <View>
+                      <Text>${detalle.importePxVto.toFixed(2)}</Text>
+                      <Text>{detalle.fechadeProximoVencimiento}</Text>
+                      <Text>{detalle.cuota}</Text>
+                    </View>
+                  </DataTable.Cell>
                 </DataTable.Row>
               ))}
             </DataTable>

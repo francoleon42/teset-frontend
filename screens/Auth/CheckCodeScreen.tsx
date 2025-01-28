@@ -1,22 +1,40 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
+import { loginStepTwo } from '../../servicios/authService';
 
 
-//login step two remplazar con codigo verificacion
-export default function CheckCodeScreen({ navigation }) {
+//login step two 
+export default function CheckCodeScreen({ route, navigation }) {
   const [codigo, setCodigo] = useState('');
+  const { email } = route.params;
+  const handleSubmit = async () => {
 
-  const handleSubmit = () => {
-    // Aquí podrías agregar la lógica para enviar el enlace de recuperación
-    if (codigo) {
-      // Lógica de recuperación de contraseña (por ejemplo, a través de una API)
-      Alert.alert('Codigo Verificado', 'Hemos verificado el codigo de forma exitosa.', [{ text: 'OK' }]);
-      navigation.goBack(); // Vuelve a la pantalla anterior (Login)
-    } else {
-      Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+    try {
+
+      const requestData = {
+        codigo: codigo,
+        username: email,
+        codDispositivo: 'codigoNuevod',
+      };
+
+      const response = await loginStepTwo(requestData);
+
+      if (response.role == "CLIENTE") {
+        console.log("TOKEN:", response.token);
+        navigation.navigate('Root', { token: response.token });
+      }
+      // Lógica después de la verificación
+      Alert.alert('Éxito', 'Correo verificado con éxito.', [
+        { text: 'OK', onPress: () => navigation.navigate('Login') },
+      ]);
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intenta más tarde.');
+      console.error('Login error:', error);
+      return; // Evita continuar si hay un error
     }
   };
+
 
   return (
     <View style={styles.container}>
@@ -32,14 +50,19 @@ export default function CheckCodeScreen({ navigation }) {
         autoCapitalize="none"
       />
 
-       <Button
+      <Button
         mode="contained"
         onPress={handleSubmit}
         style={styles.button}
       >
-              Verificar codigo
-            </Button>
-
+        Verificar codigo
+      </Button>
+      <TouchableOpacity
+        style={styles.link}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={styles.linkText}>Volver al inicio de sesión</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -65,25 +88,25 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   input: {
-    margin:5,
-    paddingBottom:5,
-    paddingTop:5,
-    textAlign:'left',
-    fontSize:16,
-    height:55,
-    borderRadius:15,
-    paddingHorizontal:40,
-    paddingLeft:30,
-    borderWidth:1,
-    borderColor:'#EBEBEB',
-    backgroundColor:'#FAFAFA',
+    margin: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+    textAlign: 'left',
+    fontSize: 16,
+    height: 55,
+    borderRadius: 15,
+    paddingHorizontal: 40,
+    paddingLeft: 30,
+    borderWidth: 1,
+    borderColor: '#EBEBEB',
+    backgroundColor: '#FAFAFA',
     marginBottom: 15,
   },
   button: {
     width: '100%',
     marginBottom: 15,
-    color:'#ffffff',
-    backgroundColor: '#11ae40', 
+    color: '#ffffff',
+    backgroundColor: '#11ae40',
   },
   buttonText: {
     color: '#fff',
@@ -91,9 +114,10 @@ const styles = StyleSheet.create({
   },
   link: {
     marginTop: 10,
+    alignItems: 'center',
   },
   linkText: {
     color: '#007bff',
-    fontSize: 16,
+    fontSize: 14,
   },
 });

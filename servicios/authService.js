@@ -14,6 +14,11 @@ export const loginStepTwo = async (data) => {
     return await executeFetch(endpoint, data, HttpMethods.POST, null, 200);
 };
 
+export const updatePasswordStepOne = async (data) => {
+    const endpoint = backendUrl + '/update/step-one/{dni}';
+    return await executeFetch(endpoint, data, HttpMethods.PATCH, null, 200);
+};
+
 
 export const register = async (data, token) => {
     const endpoint = backendUrl + '/auth/register';

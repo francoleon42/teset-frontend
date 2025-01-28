@@ -1,5 +1,5 @@
 import SingInScreen from "../screens/Auth/SignInScreen";
-import VerifyCodeScreen from "../screens/Progress/CodigoVerificacion";
+import CheckCodeScreen from "../screens/Auth/CheckCodeScreen";
 
 import {
   DarkTheme,
@@ -32,7 +32,7 @@ function RootNavigator() {
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="SignIn" component={SingInScreen} />
-      <Stack.Screen name="VerifyCodeScreen" component={VerifyCodeScreen} />  
+      <Stack.Screen name="CheckCode" component={CheckCodeScreen} />  
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen
         name="NotFound"
