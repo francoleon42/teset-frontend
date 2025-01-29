@@ -5,10 +5,12 @@ import { HttpMethods } from '../connection/HttpMethods'
 
 
 export const loginStepOne = async (data) => {
+    
     const endpoint = backendUrl + '/auth/login/step-one';
-
     return await executeFetch(endpoint, data, HttpMethods.POST, null, 200);
 };
+
+
 export const loginStepTwo = async (data) => {
     const endpoint = backendUrl + '/auth/login/step-two';
     return await executeFetch(endpoint, data, HttpMethods.POST, null, 200);

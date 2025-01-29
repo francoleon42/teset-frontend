@@ -41,8 +41,7 @@ const SignInScreen = () => {
       };
 
       const responseOne = await loginStepOne(requestloginStepOne);
-
-      if (responseOne) {
+      
         Alert.alert('Bienvenido', `Hola, ${email}`);
         if (responseOne.nuevoDispositivo) {
           navigation.navigate('CheckCode', { email });
@@ -59,12 +58,11 @@ const SignInScreen = () => {
             navigation.navigate('Root', { token: responseTwo.token });
           }
         }
-      } else {
-        Alert.alert('Error', responseOne?.message || 'Algo salió mal');
-      }
+      
+      
     } catch (error) {
       Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intenta más tarde.');
-      console.error('Login error:', error);
+      // console.error('Login error:', error);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,5 @@
 
 
-export const backendUrl = "http://localhost:8080"
+export const backendUrl = "http://192.168.0.13:8080"
 
 

@@ -19,6 +19,7 @@ const getFetchOptions = (method, data, token) => {
         method: method,
         headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json'
         },
     };
 
@@ -72,7 +73,7 @@ export const executeFetch = async (endpoint, data = null, method, token = null, 
 
         return await handleResponse(response, statusExpected);
     } catch (error) {
-        console.error('Error en la solicitud:', error);
+        // console.error('Error en la solicitud:', error);
         throw error;
     }
 };
