@@ -1,39 +1,39 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
 import { updatePasswordStepOne } from '../../servicios/authService';
 
-
-//update step one 
+// Update step one 
 export default function ForgotPasswordScreen({ navigation }) {
   const [dni, setDni] = useState('');
+  const [loading, setLoading] = useState(false); 
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
-      const data = {
-        dni: dni
-      }
+      const data = { dni };
       const response = await updatePasswordStepOne(data);
       const email = response.username;
-      navigation.navigate('NewPassword',{ email,dni });
-
+      navigation.navigate('NewPassword', { email, dni });
     } catch (error) {
       Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
       console.error('Login error:', error);
+    } finally {
+      setLoading(false); 
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Olvidé mi contraseña</Text>
-      <Text style={styles.subTitle}>Por favor, ingrese su dni:</Text>
+      <Text style={styles.subTitle}>Por favor, ingrese su DNI:</Text>
 
       <TextInput
         style={styles.input}
         placeholder="DNI"
         value={dni}
         onChangeText={setDni}
-        keyboardType="email-address"
+        keyboardType="numeric"
         autoCapitalize="none"
       />
 
@@ -41,10 +41,12 @@ export default function ForgotPasswordScreen({ navigation }) {
         mode="contained"
         onPress={handleSubmit}
         style={styles.button}
+        disabled={loading} 
       >
-        Enviar codigo
+        {loading ? 'Cargando...' : 'Enviar código'}
       </Button>
 
+      {loading && <ActivityIndicator size="large" color="#11ae40" style={styles.spinner} />}
     </View>
   );
 }
@@ -61,13 +63,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 15,
     color: '#333',
-    alignItems: 'center',
+    textAlign: 'center',
   },
   subTitle: {
     fontSize: 15,
     marginBottom: 35,
     color: '#808080',
-    alignItems: 'flex-start',
+    textAlign: 'center',
   },
   input: {
     margin: 5,
@@ -87,18 +89,11 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     marginBottom: 15,
-    color: '#ffffff',
     backgroundColor: '#11ae40',
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  link: {
-    marginTop: 10,
-  },
-  linkText: {
-    color: '#007bff',
-    fontSize: 16,
+  spinner: {
+    marginTop: 20,
+    alignSelf: 'center',
   },
 });
+

@@ -13,6 +13,7 @@ type RootStackParamList = {
   NewPassword:{ email:string, dni: string };
   CheckEmail:undefined;
   SignUp:{ email: string };
+  TermsAndConditions: undefined;
   NotFound: undefined;
 };
 
@@ -74,7 +75,7 @@ const SignInScreen = () => {
   };
 
   const handleRegister = () => {
-    navigation.navigate('CheckEmail');
+    navigation.navigate('TermsAndConditions');
     Alert.alert('Registro', 'Serás redirigido a la pantalla de registro');
   };
 

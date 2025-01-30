@@ -4,6 +4,7 @@ import ForgotPasswordScreen from "../screens/Auth/ForgotPasswordScreen";
 import NewPasswordScreen from "../screens/Auth/NewPasswordScreen"
 import SignUpScreen from "../screens/Auth/SignUpScreen"
 import CheckEmailScreen from "../screens/Auth/CheckEmailScreen"
+import TermsAndConditionsScreen from "../screens/Auth/TermsAndConditionsScreen"
 
 
 
@@ -47,6 +48,7 @@ function RootNavigator() {
 
       <Stack.Screen name="CheckEmail" component={CheckEmailScreen} /> 
       <Stack.Screen name="SignUp" component={SignUpScreen} /> 
+      <Stack.Screen name="TermsAndConditions" component={TermsAndConditionsScreen} /> 
       
       
       <Stack.Screen name="Root" component={BottomTabNavigator} />

@@ -1,9 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Button } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function TermsAndConditionsScreen() {
+export default function TermsAndConditionsScreen({navigation }) {
+  const handleAccept = () => {
+    navigation.navigate('CheckEmail');
+  };
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Terminos y Condiciones</Text>
@@ -79,8 +82,10 @@ export default function TermsAndConditionsScreen() {
 
         Estos términos se regirán e interpretarán de acuerdo con las leyes de Argentina, sin tener en cuenta sus principios de conflicto de leyes. Cualquier disputa relacionada con estos términos será resuelta en los tribunales competentes de Capital Federal, Buenos Aires, a menos que se acuerde lo contrario.
       </Text>
+      <View style={styles.buttonContainer}>
+        <Button title="Aceptar términos y condiciones" onPress={handleAccept}  />
+      </View>
       </ScrollView>
-
     </SafeAreaView>
   );
 }
@@ -88,21 +93,33 @@ export default function TermsAndConditionsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    color: '#333',
-    alignItems: 'center',
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
+    textAlign: "center",
   },
   subTitle: {
     fontSize: 15,
-    marginBottom: 35,
-    color: '#808080',
-    alignItems: 'flex-start',
+    marginBottom: 20,
+    color: "#808080",
+    textAlign: "center",
+  },
+  scroll: {
+    flex: 1,
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 14,
+    color: "#333",
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    marginVertical: 20,
+    alignItems: "center",
   },
 });

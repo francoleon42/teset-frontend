@@ -29,14 +29,12 @@ const SignUpScreen = ({ navigation, route }) => {
       navigation.navigate('SignIn');
 
     } catch (error) {
-      Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+      Alert.alert('Error', 'Por favor, ingresa el codigo válido.');
       console.error('Login error:', error);
     }
   };
 
-  const handleTerminos = () => {
-    Alert.alert('Terminos y Condiciones', 'Serás redirigido a la pantalla de terminos y condiciones');
-  };
+
 
   return (
     <View style={styles.container}>
@@ -74,11 +72,6 @@ const SignUpScreen = ({ navigation, route }) => {
       >
         Crear Cuenta
       </Button>
-
-      {/* Botón para terminos y condiciones */}
-      <TouchableOpacity onPress={handleTerminos}>
-        <Text style={styles.terminos}>Al registrarse estas aceptando los <Text style={{ color: '#11ae40' }}>terminos y condiciones</Text> de uso.</Text>
-      </TouchableOpacity>
 
     </View>
   );

@@ -1,50 +1,52 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
 import { registroStepOne } from '../../servicios/authService';
 
 //registro step one
 export default function CheckEmailScreen({ navigation }) {
   const [dni, setDni] = useState('');
+  const [loading, setLoading] = useState(false); 
 
   const handleSubmit = async () => {
+    setLoading(true); 
     try {
-      const data = {
-        dni: dni
-      }
+      const data = { dni };
       const response = await registroStepOne(data);
       const email = response.username;
-      
-      navigation.navigate('SignUp',{ email});
-
+      navigation.navigate('SignUp', { email });
     } catch (error) {
-      Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+      Alert.alert('Error', 'Por favor, ingresa un dni válido.');
       console.error('Login error:', error);
+    } finally {
+      setLoading(false); 
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Verificar correo electronico</Text>
-      <Text style={styles.subTitle}>Por favor, ingrese su dni:</Text>
+      <Text style={styles.title}>Verificar correo electrónico</Text>
+      <Text style={styles.subTitle}>Por favor, ingrese su DNI:</Text>
 
       <TextInput
         style={styles.input}
         placeholder="DNI"
         value={dni}
         onChangeText={setDni}
-        keyboardType="email-address"
+        keyboardType="numeric"
         autoCapitalize="none"
       />
 
-       <Button
-              mode="contained"
-              onPress={handleSubmit}
-              style={styles.button}
-            >
-              Enviar codigo
-            </Button>
+      <Button
+        mode="contained"
+        onPress={handleSubmit}
+        style={styles.button}
+        disabled={loading} 
+      >
+        {loading ? 'Cargando...' : 'Enviar código'}
+      </Button>
 
+      {loading && <ActivityIndicator size="large" color="#11ae40" style={styles.spinner} />}
     </View>
   );
 }
@@ -61,44 +63,37 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 15,
     color: '#333',
-    alignItems: 'center',
+    textAlign: 'center',
   },
   subTitle: {
     fontSize: 15,
     marginBottom: 35,
     color: '#808080',
-    alignItems: 'flex-start',
+    textAlign: 'center',
   },
   input: {
-    margin:5,
-    paddingBottom:5,
-    paddingTop:5,
-    textAlign:'left',
-    fontSize:16,
-    height:55,
-    borderRadius:15,
-    paddingHorizontal:40,
-    paddingLeft:30,
-    borderWidth:1,
-    borderColor:'#EBEBEB',
-    backgroundColor:'#FAFAFA',
+    margin: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+    textAlign: 'left',
+    fontSize: 16,
+    height: 55,
+    borderRadius: 15,
+    paddingHorizontal: 40,
+    paddingLeft: 30,
+    borderWidth: 1,
+    borderColor: '#EBEBEB',
+    backgroundColor: '#FAFAFA',
     marginBottom: 15,
   },
   button: {
     width: '100%',
     marginBottom: 15,
-    color:'#ffffff',
-    backgroundColor: '#11ae40', 
+    backgroundColor: '#11ae40',
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  link: {
-    marginTop: 10,
-  },
-  linkText: {
-    color: '#007bff',
-    fontSize: 16,
+  spinner: {
+    marginTop: 20,
+    alignSelf: 'center',
   },
 });
+
