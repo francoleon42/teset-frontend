@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, ScrollView, Platform, Pressable, View, TextInput, Linking, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, ScrollView, Platform, Pressable, View, TextInput, Linking, SafeAreaView, StatusBar } from 'react-native';
 import { Avatar, Icon, ListItem } from '@rneui/themed';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { getComerciosAdheridos, getComerciosAdheridosByName} from '../../servicios/negocioService';
@@ -40,12 +40,14 @@ export default function ShopsScreen({ route }) {
     }
   };
   return (
+    <View className='flex-1 bg-[#f5f5f5]'>
+    {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View> }
     <SafeAreaProvider>
       <View style={styles.container}>
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.searchContainer}>
             <TextInput
-              placeholder="Buscar comercio"
+              placeholder="Buscar comercio 🔍"
               style={styles.containerInput}
               placeholderTextColor="#929292"
               onChangeText={(text) => {
@@ -54,9 +56,6 @@ export default function ShopsScreen({ route }) {
               }}
               value={comercio}
             />
-            <View style={styles.searchIcon}>
-              <Icon name="search" size={24} color="#C9C9C9" />
-            </View>
           </View>
           <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
             {comercios &&
@@ -88,6 +87,7 @@ export default function ShopsScreen({ route }) {
         </SafeAreaView>
       </View>
     </SafeAreaProvider>
+    </View>
   );
 }
 
@@ -101,14 +101,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#11ae40',
   },
   searchContainer: {
-    backgroundColor: '#f5f5f5',
+    paddingTop: Platform.OS === 'android' ? 25 : 0,
+    backgroundColor: '#11ae40',
     padding: 10,
   },
   containerInput: {
     margin: 5,
     paddingBottom: 5,
     paddingTop: 5,
-    textAlign: 'left',
+    textAlign: 'center',
     fontSize: 16,
     height: 55,
     borderRadius: 15,
@@ -116,12 +117,7 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     borderWidth: 1,
     borderColor: '#EBEBEB',
-    backgroundColor: '#FAFAFA',
-  },
-  searchIcon: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
+    backgroundColor: '#f5f5f5',
   },
   scrollView: {
     flex: 1,
@@ -130,4 +126,9 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 20, // Asegura espacio al final
   },
+  droidSafeArea: {
+    flex: 1,
+    backgroundColor: '#11ae40',
+    paddingTop: Platform.OS === 'android' ? 25 : 0
+},
 });

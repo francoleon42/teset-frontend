@@ -1,6 +1,6 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TouchableWithoutFeedback, FlatList, Platform, StatusBar } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { DataTable } from 'react-native-paper';
 import { getCliente, getClienteDetalle } from '../../servicios/clienteService';
@@ -9,6 +9,7 @@ import StyleCard from '../../components/Card/StyleCard';
 import Card from '../../components/Card/Card';
 import Slider from '../../components/Silder/Slider';
 import Modal from '../Components/modal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen({ route }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -46,9 +47,12 @@ export default function HomeScreen({ route }) {
   const onShowAccountDetail = () => setIsModalVisible(true);
   const onModalClose = () => setIsModalVisible(false);
 
+
+
   return (
-    <View className="flex-1 bg-[#f5f5f5]">
-      <View className="pt-16 pb6 px-6 bg-[#11ae40]">
+    <View className="flex-1 bg-[#f5f5f5]" >
+      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : '' }
+      <View className="pt-16 pb6 px-6 bg-[#11ae40]" style={{paddingTop: Platform.OS === 'android' ? 25 : 60}}>
         <Animated.View className="flex-row justify-between items-center">
           <View>
             <View className="flex-row items-end gap-1">
@@ -83,34 +87,30 @@ export default function HomeScreen({ route }) {
         <TouchableOpacity style={styles.appButtonContainer} onPress={onShowAccountDetail}>
           <Text style={styles.appButtonText}>Ver detalle de cuenta</Text>
         </TouchableOpacity>
-        <Modal isVisible={isModalVisible} onClose={onModalClose}>
-          <ScrollView style={styles.container}>
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title>Fecha emision</DataTable.Title>
-                <DataTable.Title>CreditoNro</DataTable.Title>
-                <DataTable.Title>Comercio</DataTable.Title>
-                <DataTable.Title>Importe a pagar</DataTable.Title>
-                <DataTable.Title>Prox vencim</DataTable.Title>
-              </DataTable.Header>
-              {clientDetalle?.map((detalle, index) => (
-                <DataTable.Row key={index}>
-                  <DataTable.Cell>{detalle.fechaEmision}</DataTable.Cell>
-                  <DataTable.Cell>{detalle.secuencia}</DataTable.Cell>
-                  <DataTable.Cell>{detalle.codCom}</DataTable.Cell>
-                  <DataTable.Cell>${detalle.importe.toFixed(2)}</DataTable.Cell>
-                  <DataTable.Cell>
+        <TouchableWithoutFeedback>
+          <Modal isVisible={isModalVisible} onClose={onModalClose}>
+            <FlatList
+              style={styles.container}
+              data={clientDetalle}
+              keyExtractor={item => item.codCom}
+              renderItem={({ item, index }) => (
+                <View style={styles.fila} key={index}>
+                  <Text style={styles.columna}>{item.fechaEmision}</Text>
+                  <Text style={styles.columna}>{item.secuencia}</Text>
+                  <Text style={styles.columna}>{item.codCom}</Text>
+                  <Text style={styles.columna}>${item.importe.toFixed(2)}</Text>
+                  <Text style={styles.columna}>
                     <View>
-                      <Text>${detalle.importePxVto.toFixed(2)}</Text>
-                      <Text>{detalle.fechadeProximoVencimiento}</Text>
-                      <Text>{detalle.cuota}</Text>
+                      <Text style={styles.columna}>${item.importePxVto.toFixed(2)}</Text>
+                      <Text style={styles.columna}>{item.fechadeProximoVencimiento}</Text>
+                      <Text style={styles.columna}>{item.cuota}</Text>
                     </View>
-                  </DataTable.Cell>
-                </DataTable.Row>
-              ))}
-            </DataTable>
-          </ScrollView>
-        </Modal>
+                  </Text>
+                </View>
+              )}
+            />
+          </Modal>
+        </TouchableWithoutFeedback>
       </ScrollView>
     </View>
   );
@@ -142,5 +142,17 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
+  },
+  fila: {
+    flexDirection: 'row',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#11ae40',
+  },
+  columna: {
+    flex: 1,
+    fontSize: 11,
+    textAlign: 'center',
   },
 });

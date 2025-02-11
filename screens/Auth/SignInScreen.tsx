@@ -4,6 +4,7 @@ import { Button } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { loginStepOne, loginStepTwo } from '../../servicios/authService';
+import * as Device from 'expo-device';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -23,34 +24,38 @@ const SignInScreen = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-
+  
   const navigation = useNavigation<NavigationProp>();
+
+  const deviceID = Device.osInternalBuildId.toString().trim();
 
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Por favor, ingrese ambos campos');
+      console.log('deviceID: ' + deviceID);
       return;
     }
-
+    console.log('deviceID: ' + deviceID);
     setLoading(true);
 
     try {
       const requestloginStepOne = {
         username: email,
         password,
-        codDispositivo: 'codigoBoostrap',
+        codDispositivo: deviceID,
       };
 
       const responseOne = await loginStepOne(requestloginStepOne);
       
-        Alert.alert('Bienvenido', `Hola, ${email}`);
+        
         if (responseOne.nuevoDispositivo) {
           navigation.navigate('CheckCode', { email });
         } else {
+          Alert.alert('Bienvenido', `Hola, ${email}`);
           const requestloginStepTwo = {
             codigo: '12345',
             username: email,
-            codDispositivo: 'codigoBoostrap',
+            codDispositivo: deviceID,
           };
 
           const responseTwo = await loginStepTwo(requestloginStepTwo);

@@ -30,9 +30,10 @@ export default function NewsScreen({ route }) {
 
   return (
     <View className='flex-1 bg-[#f5f5f5]'>
-    <SafeAreaProvider style={styles.droidSafeArea}>
-        <SafeAreaView className='bg-[#11ae40]' >
-      <View className='bg-[#f5f5f5]' style={{paddingBottom:5}}></View>
+      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View> }
+    <SafeAreaProvider>
+        <SafeAreaView>
+      <View className='bg-[#f5f5f5]' style={{paddingBottom:5, paddingTop: Platform.OS === 'android' ? 25 : 0,}}></View>
         <SectionList
           sections={novedadesSections}
           renderItem={({item, section}) => (

@@ -1,6 +1,7 @@
-import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
+import { Modal, View, Text, Pressable, StyleSheet, SafeAreaView } from 'react-native';
 import { PropsWithChildren } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 type Props = PropsWithChildren<{
@@ -11,33 +12,43 @@ type Props = PropsWithChildren<{
 export default function modal({ isVisible, children, onClose }: Props) {
 
   return (
-    <Modal animationType="slide" transparent={true} visible={isVisible}>
-      <View style={styles.modalContent}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Detalle de Cuenta</Text>
-          <Pressable onPress={onClose}>
-            <MaterialIcons name="close" color="#fff" size={22} />
-          </Pressable>
-        </View>
-        {children}
-      </View>
-    </Modal>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.centeredView}>
+        <Modal animationType="slide" transparent={true} visible={isVisible} onRequestClose={() => {onClose}}>
+          <View style={styles.modalContent}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>Detalle de la Cuenta</Text>
+              <Pressable onPress={onClose}>
+                <MaterialIcons name="close" color="#fff" size={22} />
+              </Pressable>
+            </View>
+            {children}
+          </View>
+        </Modal>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   modalContent: {
-    height: '35%',
+    height: '50%',
     width: '100%',
     backgroundColor: '#f5f5f5',
     borderTopRightRadius: 18,
     borderTopLeftRadius: 18,
     position: 'absolute',
     bottom: 0,
+    // fontSize: 10,
     
   },
   titleContainer: {
-    height: '16%',
+    height: '10%',
     backgroundColor: '#11ae40',
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
@@ -45,6 +56,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    // fontSize: 10,
   },
   title: {
     color: '#fff',

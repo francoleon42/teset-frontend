@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
 import { loginStepTwo } from '../../servicios/authService';
+import * as Device from 'expo-device';
 
 
 //login step two 
 export default function CheckCodeScreen({ route, navigation }) {
   const [codigo, setCodigo] = useState('');
   const { email } = route.params;
+  const deviceID = Device.osInternalBuildId.toString().trim();
   const handleSubmit = async () => {
 
     try {
@@ -15,7 +17,7 @@ export default function CheckCodeScreen({ route, navigation }) {
       const requestData = {
         codigo: codigo,
         username: email,
-        codDispositivo: 'codigoNuevod',
+        codDispositivo: deviceID,
       };
 
       const response = await loginStepTwo(requestData);
@@ -25,8 +27,8 @@ export default function CheckCodeScreen({ route, navigation }) {
         navigation.navigate('Root', { token: response.token });
       }
       // Lógica después de la verificación
-      Alert.alert('Éxito', 'Correo verificado con éxito.', [
-        { text: 'OK', onPress: () => navigation.navigate('Login') },
+      Alert.alert('Éxito', 'Correo verificado con éxito. ' + `Hola, ${email}`, [
+        { text: 'OK', onPress: () => navigation.navigate('Inicio') },
       ]);
     } catch (error) {
       Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intenta más tarde.');
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   linkText: {
-    color: '#007bff',
+    color: 'black',
     fontSize: 14,
   },
 });
