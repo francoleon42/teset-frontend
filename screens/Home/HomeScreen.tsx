@@ -69,9 +69,8 @@ export default function HomeScreen({ route }) {
   const callLogout =  async () => {
     console.log('logout')
     try{
-      const responseLogout = logout(useToken);
-      console.log(responseLogout);
-      // navigation.navigate('SignIn');
+      const responseLogout = logout(token);
+      navigation.navigate('SignIn');
     } catch (error){
       console.log(error);
       
