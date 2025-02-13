@@ -22,6 +22,7 @@ type RootStackParamList = {
   SignUp:{ email: string };
   TermsAndConditions: undefined;
   NotFound: undefined;
+  Slider:{ token: string }
 };
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -104,7 +105,7 @@ export default function HomeScreen({ route }) {
         </Animated.View>
       </View>
       <ScrollView>
-        <Slider />
+        <Slider token={token}  />
         <StyleCard
           title={`$${clientData?.saldoCompras || '0'}`}
           subtitle="DISPONIBLE PARA COMPRAS 🛒"
