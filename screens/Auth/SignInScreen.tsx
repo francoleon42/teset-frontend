@@ -51,7 +51,7 @@ const SignInScreen = () => {
         if (responseOne.nuevoDispositivo) {
           navigation.navigate('CheckCode', { email });
         } else {
-          Alert.alert('Bienvenido', `Hola, ${email}`);
+          // Alert.alert('Bienvenido', `Hola, ${email}`);
           const requestloginStepTwo = {
             codigo: '12345',
             username: email,
@@ -76,12 +76,12 @@ const SignInScreen = () => {
 
   const handleForgotPassword = () => {
     navigation.navigate('ForgotPassword');
-    Alert.alert('Recuperación de contraseña', 'Se enviará un enlace para recuperar tu contraseña al correo ingresado');
+    // Alert.alert('Recuperación de contraseña', 'Se enviará un enlace para recuperar tu contraseña al correo ingresado');
   };
 
   const handleRegister = () => {
     navigation.navigate('TermsAndConditions');
-    Alert.alert('Registro', 'Serás redirigido a la pantalla de registro');
+    // Alert.alert('Registro', 'Serás redirigido a la pantalla de registro');
   };
 
   return (

@@ -33,21 +33,22 @@ export default function NewsScreen({ route }) {
       {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View> }
     <SafeAreaProvider>
         <SafeAreaView>
-      <View className='bg-[#f5f5f5]' style={{paddingBottom:5, paddingTop: Platform.OS === 'android' ? 25 : 0,}}></View>
-        <SectionList
-          sections={novedadesSections}
-          renderItem={({item, section}) => (
-            <View className='bg-[#f5f5f5]' style={{paddingBottom:10}}>
-              <Pressable onPress={() => 
-                Linking.openURL(section.comercioUrl)
-              }>
-              <Image source={{uri: item}} style={styles.banner}></Image>
-              </Pressable>
-            </View>
-          )}
-        /> 
+          <View className='bg-[#f5f5f5]' style={{paddingBottom:5, paddingTop: Platform.OS === 'android' ? 25 : 0,}}></View>
+            <SectionList
+              sections={novedadesSections}
+              style={{marginBottom: Platform.OS === 'android' ? 30 : 0}}
+              renderItem={({item, section}) => (
+                <View className='bg-[#f5f5f5]' style={{paddingBottom:10}}>
+                  <Pressable onPress={() => 
+                    Linking.openURL(section.comercioUrl)
+                  }>
+                  <Image source={{uri: item}} style={styles.banner}></Image>
+                  </Pressable>
+                </View>
+              )}
+            /> 
         </SafeAreaView>
-        </SafeAreaProvider>
+      </SafeAreaProvider>
     </View>
   );
 }

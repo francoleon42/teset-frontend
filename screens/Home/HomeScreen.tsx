@@ -1,15 +1,30 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TouchableWithoutFeedback, FlatList, Platform, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TouchableWithoutFeedback, FlatList, Platform, StatusBar, Alert } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { DataTable } from 'react-native-paper';
 import { getCliente, getClienteDetalle } from '../../servicios/clienteService';
+import { logout } from '../../servicios/authService';
 import { Emoji } from '../../components/Emoji/Emoji';
 import StyleCard from '../../components/Card/StyleCard';
 import Card from '../../components/Card/Card';
 import Slider from '../../components/Silder/Slider';
 import Modal from '../Components/modal';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+
+type RootStackParamList = {
+  SignIn: undefined;
+  CheckCode: { email: string };
+  Root: { token: string };
+  ForgotPassword: undefined;
+  NewPassword:{ email:string, dni: string };
+  CheckEmail:undefined;
+  SignUp:{ email: string };
+  TermsAndConditions: undefined;
+  NotFound: undefined;
+};
+
+type NavigationProp = StackNavigationProp<RootStackParamList, 'SignIn'>;
 
 export default function HomeScreen({ route }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -21,6 +36,8 @@ export default function HomeScreen({ route }) {
   const [clientDetalle, setClientDetalle] = useState<any>(null);
   const { token } = route.params;
   const [useToken, setToken] = useState<string>(token);
+
+  const navigation = useNavigation<NavigationProp>();
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -42,12 +59,24 @@ export default function HomeScreen({ route }) {
     if (hours >= 5 && hours < 13) setEsDia(true);
     else if (hours >= 13 && hours < 19) setEsTarde(true);
     else setEsNoche(true);
+
   }, [token]);
 
   const onShowAccountDetail = () => setIsModalVisible(true);
   const onModalClose = () => setIsModalVisible(false);
 
-
+  const callLogout =  async () => {
+    console.log('logout')
+    try{
+      const responseLogout = logout(useToken);
+      console.log(responseLogout);
+      // navigation.navigate('SignIn');
+    } catch (error){
+      console.log(error);
+      
+      Alert.alert('Error', 'Error al cerrar sesion, cierre y abra la aplicacion.');
+    }
+  };
 
   return (
     <View className="flex-1 bg-[#f5f5f5]" >
@@ -69,8 +98,8 @@ export default function HomeScreen({ route }) {
               {clientData?.nombre || 'Usuario'}
             </Text>
           </View>
-          <TouchableOpacity onPress={() => console.log('Press')}>
-            <MaterialIcons name="person-outline" size={40} color="white" />
+          <TouchableOpacity onPress={callLogout}>
+            <MaterialIcons name="logout" size={30} color="white" />
           </TouchableOpacity>
         </Animated.View>
       </View>
@@ -130,6 +159,7 @@ const styles = StyleSheet.create({
     width: '95%',
     alignSelf: 'center',
     height: 'auto',
+    marginBottom: Platform.OS === 'android' ? 20 : 0
   },
   appButtonText: {
     fontSize: 18,

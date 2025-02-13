@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,8 +9,8 @@ export default function TermsAndConditionsScreen({navigation }) {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Terminos y Condiciones</Text>
-      <Text style={styles.subTitle}>Usted esta aceptando todos los terminos y condiciones mencionados abajo</Text>
+      <Text style={styles.title}>Términos y Condiciones</Text>
+      <Text style={styles.subTitle}>Usted esta aceptando todos los términos y condiciones mencionados abajo</Text>
       <ScrollView>
       <Text>Última actualización: Marzo 2025</Text>
 
@@ -82,9 +82,11 @@ export default function TermsAndConditionsScreen({navigation }) {
 
         Estos términos se regirán e interpretarán de acuerdo con las leyes de Argentina, sin tener en cuenta sus principios de conflicto de leyes. Cualquier disputa relacionada con estos términos será resuelta en los tribunales competentes de Capital Federal, Buenos Aires, a menos que se acuerde lo contrario.
       </Text>
-      <View style={styles.buttonContainer}>
-        <Button title="Aceptar términos y condiciones" onPress={handleAccept}  />
-      </View>
+      <TouchableOpacity onPress={handleAccept}>
+        <Text style={styles.buttonContainer}>
+          <Text style={{ color: '#11ae40' }}>Aceptar términos y condiciones</Text>
+        </Text>
+      </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -120,6 +122,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginVertical: 20,
+    textAlign:'center',
     alignItems: "center",
   },
 });

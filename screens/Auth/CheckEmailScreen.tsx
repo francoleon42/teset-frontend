@@ -1,12 +1,36 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Pressable, Linking, Platform } from 'react-native';
 import { Button } from 'react-native-paper';
 import { registroStepOne } from '../../servicios/authService';
+import SweetAlert, { showSweetAlert } from '../../components/Sweet Alert/SweetAlert';
 
 //registro step one
 export default function CheckEmailScreen({ navigation }) {
   const [dni, setDni] = useState('');
   const [loading, setLoading] = useState(false); 
+  const [sweetAlerOpen, setSweetAlerOpen] = useState(false);
+
+  useEffect(() => {
+    setSweetAlerOpen(sweetAlerOpen);
+  });
+
+
+  showSweetAlert({
+    title: 'Usuario inexistente',
+    text: 'Por favor, llame a Teset para registrarse.',
+    showCancelButton: true,
+    cancelButtonText: 'Cancelar',
+    confirmButtonText: 'Llamar',
+    onConfirm: () => {
+      Linking.openURL('tel:1130604587');
+      setSweetAlerOpen(false);
+    },
+    onClose: () => {
+      console.log('Cerrado');
+      setSweetAlerOpen(false);
+    },
+    type: 'user', // 'info', 'success', 'danger', veya 'warning' olabilirm, 'user'
+  });
 
   const handleSubmit = async () => {
     setLoading(true); 
@@ -16,8 +40,18 @@ export default function CheckEmailScreen({ navigation }) {
       const email = response.username;
       navigation.navigate('SignUp', { email });
     } catch (error) {
-      Alert.alert('Error', 'Por favor, ingresa un dni válido.');
-      console.error('Login error:', error);
+      if (error == 'El usuario no es cliente'){
+        Alert.alert('Error', 'Por favor, llame al siguiente numero para darte de alta en Teset: 11-3060-4587.', [
+          {
+            text: 'Cancelar',
+            style: 'cancel',
+          },
+          {text: 'Llamar', onPress: () => Linking.openURL('tel:1130604587')},
+        ]);
+      }
+      setSweetAlerOpen(true);
+      // Alert.alert('Error', 'Por favor, ingresa un dni válido.');
+      // console.error('Login error:', error);
     } finally {
       setLoading(false); 
     }
@@ -25,8 +59,9 @@ export default function CheckEmailScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      {sweetAlerOpen && <SweetAlert/>}
       <Text style={styles.title}>Verificar correo electrónico</Text>
-      <Text style={styles.subTitle}>Por favor, ingrese su DNI:</Text>
+      <Text style={styles.subTitle}>Por favor, ingrese su DNI para realizar la validación</Text>
 
       <TextInput
         style={styles.input}
