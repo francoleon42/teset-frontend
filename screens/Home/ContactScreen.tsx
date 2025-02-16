@@ -16,6 +16,7 @@ export default function ContactScreen({ route }) {
     const fetchContactos = async () => {
       try {
         const response = await getContactos(token);
+        console.log(response);
         setContactos(response);
       } catch (error) {
         console.error('Error obteniendo contactos:', error);
@@ -27,8 +28,21 @@ export default function ContactScreen({ route }) {
 
   const renderContacto = (contacto: any, index: number) => {
     const { tipo, titulo, subTitulo, logoLink, link } = contacto;
+    
+    const handlePress = () => {
+      console.log(link);
+      if (typeof link === 'string' && link.trim() !== '') {
+      
+        Linking.openURL(link).catch((err) => {
+          console.error("Error abriendo link:", err);
+        });
+      } else {
+        console.warn("Link inválido o indefinido:", link);
+      }
+    };
+  
     return (
-      <Pressable onPress={() => Linking.openURL(link)} key={index}>
+      <Pressable onPress={handlePress} key={index}>
         <ListItem bottomDivider>
           <Avatar rounded source={{ uri: logoLink }} />
           <ListItem.Content>
@@ -39,6 +53,7 @@ export default function ContactScreen({ route }) {
       </Pressable>
     );
   };
+  
 
   return (
     <View className='flex-1 bg-[#f5f5f5]'>
@@ -46,27 +61,19 @@ export default function ContactScreen({ route }) {
       <SafeAreaProvider style={{paddingTop: Platform.OS === 'android' ? 25 : 0}}>
         <SafeAreaView >
           <ScrollView>
-            {/* Sección Redes Sociales */}
-            {contactos && contactos.filter(contacto => contacto.tipo === 'REDES_SOCIALES').length > 0 && (
+            {/* Sección PRESENCIA ONLINE */}
+            {contactos && contactos.filter(contacto => contacto.tipo === 'PRESENCIA_ONLINE').length > 0 && (
               <>
-                <Text style={styles.titleText}>Redes Sociales</Text>
-                {contactos.filter(contacto => contacto.tipo === 'REDES_SOCIALES').map(renderContacto)}
+                <Text style={styles.titleText}>Presencia Online</Text>
+                {contactos.filter(contacto => contacto.tipo === 'PRESENCIA_ONLINE').map(renderContacto)}
               </>
             )}
-
-            {/* Sección WhatsApp */}
-            {contactos && contactos.filter(contacto => contacto.tipo === 'WHATSAPP').length > 0 && (
+        
+            {/* Sección CONTACTO DIRECTO */}
+            {contactos && contactos.filter(contacto => contacto.tipo === 'CONTACTO_DIRECTO').length > 0 && (
               <>
-                <Text style={styles.titleText}>Numeros WhatsApp</Text>
-                {contactos.filter(contacto => contacto.tipo === 'WHATSAPP').map(renderContacto)}
-              </>
-            )}
-
-            {/* Sección Teléfonos */}
-            {contactos && contactos.filter(contacto => contacto.tipo === 'TELEFONO').length > 0 && (
-              <>
-                <Text style={styles.titleText}>Numeros Telefonicos</Text>
-                {contactos.filter(contacto => contacto.tipo === 'TELEFONO').map(renderContacto)}
+                <Text style={styles.titleText}>Contacto Directo</Text>
+                {contactos.filter(contacto => contacto.tipo === 'CONTACTO_DIRECTO').map(renderContacto)}
               </>
             )}
           </ScrollView>
