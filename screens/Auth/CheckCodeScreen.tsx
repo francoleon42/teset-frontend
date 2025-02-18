@@ -30,7 +30,7 @@ export default function CheckCodeScreen({ route, navigation }) {
       // Alert.alert('Éxito', 'Correo verificado con éxito. ' + `Hola, ${email}`, [
       //   { text: 'OK', onPress: () => navigation.navigate('Inicio') },
       // ]);
-      navigation.navigate('Inicio');
+      // navigation.navigate('Inicio');
     } catch (error) {
       Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intenta más tarde.');
       console.error('Login error:', error);

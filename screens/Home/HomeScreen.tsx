@@ -131,9 +131,9 @@ export default function HomeScreen({ route }) {
             <FlatList
               style={styles.container}
               data={clientDetalle}
-              keyExtractor={item => item.codCom}
+              // keyExtractor={item => item.id}
               renderItem={({ item, index }) => (
-                <View style={styles.fila} key={index}>
+                <View style={styles.fila} key={clientDetalle.id}>
                   <Text style={styles.columna}>{item.fechaEmision}</Text>
                   <Text style={styles.columna}>{item.secuencia}</Text>
                   <Text style={styles.columna}>{item.codCom}</Text>
