@@ -17,12 +17,12 @@ type RootStackParamList = {
   CheckCode: { email: string };
   Root: { token: string };
   ForgotPassword: undefined;
-  NewPassword:{ email:string, dni: string };
-  CheckEmail:undefined;
-  SignUp:{ email: string };
+  NewPassword: { email: string, dni: string };
+  CheckEmail: undefined;
+  SignUp: { email: string };
   TermsAndConditions: undefined;
   NotFound: undefined;
-  Slider:{ token: string }
+  Slider: { token: string }
 };
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -66,22 +66,22 @@ export default function HomeScreen({ route }) {
   const onShowAccountDetail = () => setIsModalVisible(true);
   const onModalClose = () => setIsModalVisible(false);
 
-  const callLogout =  async () => {
+  const callLogout = async () => {
     console.log('logout')
-    try{
+    try {
       const responseLogout = logout(token);
       navigation.navigate('SignIn');
-    } catch (error){
+    } catch (error) {
       console.log(error);
-      
+
       Alert.alert('Error', 'Error al cerrar sesion, cierre y abra la aplicacion.');
     }
   };
 
   return (
     <View className="flex-1 bg-[#f5f5f5]" >
-      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : '' }
-      <View className="pt-16 pb6 px-6 bg-[#11ae40]" style={{paddingTop: Platform.OS === 'android' ? 25 : 60}}>
+      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default' /> : ''}
+      <View className="pt-16 pb6 px-6 bg-[#11ae40]" style={{ paddingTop: Platform.OS === 'android' ? 25 : 60 }}>
         <Animated.View className="flex-row justify-between items-center">
           <View>
             <View className="flex-row items-end gap-1">
@@ -104,14 +104,24 @@ export default function HomeScreen({ route }) {
         </Animated.View>
       </View>
       <ScrollView>
-        <Slider token={token}  />
+        <Slider token={token} />
         <StyleCard
           title={`$${clientData?.saldoCompras || '0'}`}
           subtitle="DISPONIBLE PARA COMPRAS 🛒"
           text="Podes ir a comprar a cualquier comercio adherido"
         />
-        <Card subtitle="RESUMEN DE CUENTA" text={`- Saldo a pagar a la fecha es $ ${clientData?.totalAPagar || '0'} 
-        - Proximo vencimiento ${clientData?.fechaProximoVencimiento || '0/00/0000'} $${clientData?.importePxVto || '0'}`} />
+        <Card
+          subtitle="RESUMEN DE CUENTA"
+          text={
+            <>
+              <Text>-Saldo a pagar a la fecha:  <Text style={{ fontWeight: 'bold' }}>${clientData?.saldoAPagar || '0'}</Text></Text>
+              {"\n"}
+              <Text>-Próximo vencimiento: <Text style={{ fontWeight: 'bold' }}>{clientData?.fechadeProximoVencimiento || '0/00/0000'} - </Text>
+                <Text style={{ fontWeight: 'bold' }}>{"$"+clientData?.importePxVto || '$0'}</Text></Text>
+            </>
+          }
+        />
+
 
         <TouchableOpacity style={styles.appButtonContainer} onPress={onShowAccountDetail}>
           <Text style={styles.appButtonText}>Ver detalle de cuenta</Text>
