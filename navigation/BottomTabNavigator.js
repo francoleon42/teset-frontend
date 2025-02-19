@@ -26,50 +26,56 @@ export default function BottomTabNavigator({ route }) {
   return (
     <BottomTab.Navigator
       initialRouteName="Inicio"
-      screenOptions={{ tabBarActiveTintColor: Colors[colorScheme].tint }}
+      screenOptions={{
+        tabBarActiveTintColor: Colors[colorScheme].tint
+      }}
     >
       <BottomTab.Screen
         name="Inicio"
         component={HomeScreen}
-        initialParams={{ token }} 
+        initialParams={{ token }}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-        ),
+            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+          ),
+          unmountOnBlur: false,
         }}
       />
       <BottomTab.Screen
         name="Novedades"
         component={NewsScreen}
-        initialParams={{ token }} 
+        initialParams={{ token }}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'notifications' : 'notifications-outline'} color={color} />
           ),
+          unmountOnBlur: false,
         }}
       />
-       <BottomTab.Screen
+      <BottomTab.Screen
         name="Comercios"
         component={ShopsScreen}
-        initialParams={{ token }} 
+        initialParams={{ token }}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'storefront' : 'storefront-outline'} color={color} />
           ),
+          unmountOnBlur: false,
         }}
       />
       <BottomTab.Screen
         name="Contacto"
         component={ContactScreen}
-        initialParams={{ token }} 
+        initialParams={{ token }}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'call' : 'call-outline'} color={color} />
           ),
+          unmountOnBlur: false,
         }}
       />
     </BottomTab.Navigator>

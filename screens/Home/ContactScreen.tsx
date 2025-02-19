@@ -16,7 +16,6 @@ export default function ContactScreen({ route }) {
     const fetchContactos = async () => {
       try {
         const response = await getContactos(token);
-        console.log(response);
         setContactos(response);
       } catch (error) {
         console.error('Error obteniendo contactos:', error);

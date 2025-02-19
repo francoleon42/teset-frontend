@@ -1,52 +1,69 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, Text, ScrollView, Platform, Pressable, View, TextInput, Linking, SafeAreaView, StatusBar, ActivityIndicator } from 'react-native';
 import { Avatar, ListItem } from '@rneui/themed';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { getComerciosAdheridos, getComerciosAdheridosByName } from '../../servicios/negocioService';
+import { debounce } from 'lodash'; 
+import shops from '../utils/shops.json';
+
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ShopsScreen({ route }) {
   const [comercio, setComercio] = useState('');
   const { token } = route.params;
-  const [comercios, setComercios] = useState<any>(null);
+  const [comercios, setComercios] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasFetchedAll, setHasFetchedAll] = useState(false); 
 
-  useEffect(() => {
-    const fetchComercios = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getComerciosAdheridos(token);
-        setComercios(response);
-      } catch (error) {
-        console.error('Error obteniendo datos del cliente:', error);
-      } finally {
-        setIsLoading(false); 
-      }
-    };
 
-    fetchComercios();
-  }, [token]);
+  useFocusEffect(
+    useCallback(() => {
+      setComercio('');
+      setComercios(shops);
+      setHasFetchedAll(false);
+      setIsLoading(false);
 
-  const handleSearch = async (nombre) => {
+      return () => {
+      };
+    }, [])
+  );
+
+  const handleViewMore = async () => {
     setIsLoading(true);
     try {
-      let response;
-      if (!nombre || nombre.trim() === '') {
-        response = await getComerciosAdheridos(token);
-      } else {
-        console.log("busco por nombre ", nombre);
-        response = await getComerciosAdheridosByName(token, nombre);
-      }
+      const response = await getComerciosAdheridos(token);
       setComercios(response);
+      setHasFetchedAll(true);
     } catch (error) {
-      console.error('Error en la búsqueda de comercios:', error);
+      console.error('Error cargando todos los comercios:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleSearch = debounce(async (nombre) => {
+    setIsLoading(true);
+    setHasFetchedAll(true);
+    try {
+      let response;
+      if (!nombre || nombre.trim() === '') {
+        response = hasFetchedAll 
+          ? await getComerciosAdheridos(token) 
+          : shops;
+      } else {
+        response = await getComerciosAdheridosByName(token, nombre);
+      }
+      setComercios(response);
+    } catch (error) {
+      console.error('Error en la búsqueda:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, 200);
+
   return (
     <View className='flex-1 bg-[#f5f5f5]'>
-      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View>}
+      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default' /> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View>}
       <SafeAreaProvider>
         <View style={styles.container}>
           <SafeAreaView style={styles.safeArea}>
@@ -63,36 +80,45 @@ export default function ShopsScreen({ route }) {
               />
             </View>
 
-            {isLoading ? ( 
+            {isLoading ? (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#11ae40" />
                 <Text>Cargando comercios...</Text>
               </View>
             ) : (
               <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-                {comercios &&
-                  comercios.map((comercio) => (
-                    <Pressable
-                      onPress={() => (comercio.urlGoogleMaps ? Linking.openURL(comercio.urlGoogleMaps) : null)}
-                      key={comercio.id}
-                    >
-                      <ListItem bottomDivider>
-                        <Avatar
-                          rounded
-                          source={
-                            comercio.logo
-                              ? { uri: comercio.logo }
-                              : require('../../assets/images/logoComercioDefault.png')
-                          }
-                        />
-                        <ListItem.Content>
-                          <ListItem.Title>{comercio.nombre}</ListItem.Title>
-                          <ListItem.Subtitle>{comercio.direccion}</ListItem.Subtitle>
-                          <Text style={{ fontSize: 12 }}>{comercio.telefono}</Text>
-                        </ListItem.Content>
-                      </ListItem>
-                    </Pressable>
-                  ))}
+                {comercios.map((comercio) => (
+                  <Pressable
+                    onPress={() => (comercio.urlGoogleMaps ? Linking.openURL(comercio.urlGoogleMaps) : null)}
+                    key={comercio.id}
+                  >
+                    <ListItem bottomDivider>
+                      <Avatar
+                        rounded
+                        source={
+                          comercio.logo
+                            ? { uri: comercio.logo }
+                            : require('../../assets/images/logoComercioDefault.png')
+                        }
+                      />
+                      <ListItem.Content>
+                        <ListItem.Title>{comercio.nombre}</ListItem.Title>
+                        <ListItem.Subtitle>{comercio.direccion}</ListItem.Subtitle>
+                        <Text style={{ fontSize: 12 }}>{comercio.telefono}</Text>
+                      </ListItem.Content>
+                    </ListItem>
+                  </Pressable>
+                ))}
+                
+                {/* Botón Ver Más */}
+                {!hasFetchedAll && (
+                  <Pressable 
+                    onPress={handleViewMore} 
+                    style={styles.viewMoreButton}
+                  >
+                    <Text style={styles.viewMoreText}>Ver más comercios</Text>
+                  </Pressable>
+                )}
               </ScrollView>
             )}
           </SafeAreaView>
@@ -102,7 +128,20 @@ export default function ShopsScreen({ route }) {
   );
 }
 
+ 
+
 const styles = StyleSheet.create({
+  viewMoreButton: {
+    margin: 15,
+    padding: 12,
+    backgroundColor: '#11ae40',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  viewMoreText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
@@ -134,7 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   scrollContent: {
-    paddingBottom: 20, 
+    paddingBottom: 20,
   },
   loadingContainer: {
     flex: 1,
