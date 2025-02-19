@@ -1,16 +1,5 @@
 [
-    {
-        "id": 1,
-        "codCom": "",
-        "nombre": "",
-        "rubro": null,
-        "localidad": "",
-        "direccion": "",
-        "telefono": "",
-        "logoLink": "",
-        "urlpagweb": "",
-        "urlgmaps": ""
-    },
+
     {
         "id": 2,
         "codCom": "T1SO01",

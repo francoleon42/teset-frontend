@@ -59,7 +59,7 @@ export default function ShopsScreen({ route }) {
     } finally {
       setIsLoading(false);
     }
-  }, 200);
+  }, 600);
 
   return (
     <View className='flex-1 bg-[#f5f5f5]'>
