@@ -11,6 +11,7 @@ import Slider from '../../components/Silder/Slider';
 import Modal from '../Components/modal';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -185,14 +186,18 @@ const styles = StyleSheet.create({
   },
   fila: {
     flexDirection: 'row',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+    paddingVertical: 5,
+    // paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#11ae40',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // flex: 5,
+    // fontSize: RFPercentage(1.3),
   },
   columna: {
-    flex: 1,
-    fontSize: 11,
+    // flex: 5,
+    fontSize: RFPercentage(1.4),
     textAlign: 'center',
   },
 });

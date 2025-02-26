@@ -62,69 +62,69 @@ export default function ShopsScreen({ route }) {
   }, 600);
 
   return (
-    <View className='flex-1 bg-[#f5f5f5]'>
-      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default' /> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View>}
       <SafeAreaProvider>
-        <View style={styles.container}>
-          <SafeAreaView style={styles.safeArea}>
-            <View style={styles.searchContainer}>
-              <TextInput
-                placeholder="Buscar comercio 🔍"
-                style={styles.containerInput}
-                placeholderTextColor="#929292"
-                onChangeText={(text) => {
-                  setComercio(text);
-                  handleSearch(text);
-                }}
-                value={comercio}
-              />
-            </View>
-
-            {isLoading ? (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#11ae40" />
-                <Text>Cargando comercios...</Text>
+        <View className='flex-1 bg-[#f5f5f5]'>
+        {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default' /> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View>}
+          <View style={styles.container}>
+            <SafeAreaView style={styles.safeArea}>
+              <View style={styles.searchContainer}>
+                <TextInput
+                  placeholder="Buscar comercio  🔍"
+                  style={styles.containerInput}
+                  placeholderTextColor="#929292"
+                  onChangeText={(text) => {
+                    setComercio(text);
+                    handleSearch(text);
+                  }}
+                  value={comercio}
+                />
               </View>
-            ) : (
-              <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-                {comercios.map((comercio) => (
-                  <Pressable
-                    onPress={() => (comercio.urlGoogleMaps ? Linking.openURL(comercio.urlGoogleMaps) : null)}
-                    key={comercio.id}
-                  >
-                    <ListItem bottomDivider>
-                      <Avatar
-                        rounded
-                        source={
-                          comercio.logo
-                            ? { uri: comercio.logo }
-                            : require('../../assets/images/logoComercioDefault.png')
-                        }
-                      />
-                      <ListItem.Content>
-                        <ListItem.Title>{comercio.nombre}</ListItem.Title>
-                        <ListItem.Subtitle>{comercio.direccion}</ListItem.Subtitle>
-                        <Text style={{ fontSize: 12 }}>{comercio.telefono}</Text>
-                      </ListItem.Content>
-                    </ListItem>
-                  </Pressable>
-                ))}
-                
-                {/* Botón Ver Más */}
-                {!hasFetchedAll && (
-                  <Pressable 
-                    onPress={handleViewMore} 
-                    style={styles.viewMoreButton}
-                  >
-                    <Text style={styles.viewMoreText}>Ver más comercios</Text>
-                  </Pressable>
-                )}
-              </ScrollView>
-            )}
-          </SafeAreaView>
+
+              {isLoading ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color="#11ae40" />
+                  <Text>Cargando comercios...</Text>
+                </View>
+              ) : (
+                <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+                  {comercios.map((comercio) => (
+                    <Pressable
+                      onPress={() => (comercio.urlGoogleMaps ? Linking.openURL(comercio.urlGoogleMaps) : null)}
+                      key={comercio.id}
+                    >
+                      <ListItem bottomDivider>
+                        <Avatar
+                          rounded
+                          source={
+                            comercio.logo
+                              ? { uri: comercio.logo }
+                              : require('../../assets/images/logoComercioDefault.png')
+                          }
+                        />
+                        <ListItem.Content>
+                          <ListItem.Title>{comercio.nombre}</ListItem.Title>
+                          <ListItem.Subtitle>{comercio.direccion}</ListItem.Subtitle>
+                          <Text style={{ fontSize: 12 }}>{comercio.telefono}</Text>
+                        </ListItem.Content>
+                      </ListItem>
+                    </Pressable>
+                  ))}
+                  
+                  {/* Botón Ver Más */}
+                  {!hasFetchedAll && (
+                    <Pressable 
+                      onPress={handleViewMore} 
+                      style={styles.viewMoreButton}
+                    >
+                      <Text style={styles.viewMoreText}>Ver más comercios</Text>
+                    </Pressable>
+                  )}
+                </ScrollView>
+              )}
+            </SafeAreaView>
+          </View>
         </View>
       </SafeAreaProvider>
-    </View>
   );
 }
 

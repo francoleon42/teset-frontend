@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 export default function StyleCard(props: any) {
   return (
@@ -61,12 +62,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 40,
+        // fontSize: 40,
+        fontSize: RFPercentage(5),
         fontWeight: 'bold',
         color: '#11ae40',
     },
     subtitle: {
-        fontSize: 20,
+        // fontSize: 20,
+        fontSize: RFPercentage(2),
         color: '#333',
         marginTop: 10,
     },

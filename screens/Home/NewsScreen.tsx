@@ -29,14 +29,15 @@ export default function NewsScreen({ route }) {
   })) : [];
 
   return (
-    <View className='flex-1 bg-[#f5f5f5]'>
-      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View> }
+    
     <SafeAreaProvider>
+      <View className='flex-1 bg-[#f5f5f5]'>
+      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View> }
         <SafeAreaView>
           <View className='bg-[#f5f5f5]' style={{paddingBottom:5, paddingTop: Platform.OS === 'android' ? 25 : 0,}}></View>
             <SectionList
               sections={novedadesSections}
-              style={{marginBottom: Platform.OS === 'android' ? 30 : 0}}
+              style={{marginBottom: Platform.OS === 'android' ? 30 : 60}}
               renderItem={({item, section}) => (
                 <View className='bg-[#f5f5f5]' style={{paddingBottom:10}}>
                   <Pressable onPress={() => 
@@ -48,8 +49,9 @@ export default function NewsScreen({ route }) {
               )}
             /> 
         </SafeAreaView>
-      </SafeAreaProvider>
-    </View>
+      </View>
+    </SafeAreaProvider>
+    
   );
 }
 

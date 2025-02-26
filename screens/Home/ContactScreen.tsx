@@ -55,30 +55,30 @@ export default function ContactScreen({ route }) {
   
 
   return (
-    <View className='flex-1 bg-[#f5f5f5]'>
-      {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View> }
       <SafeAreaProvider style={{paddingTop: Platform.OS === 'android' ? 25 : 0}}>
-        <SafeAreaView >
-          <ScrollView>
-            {/* Sección PRESENCIA ONLINE */}
-            {contactos && contactos.filter(contacto => contacto.tipo === 'PRESENCIA_ONLINE').length > 0 && (
-              <>
-                <Text style={styles.titleText}>Presencia Online</Text>
-                {contactos.filter(contacto => contacto.tipo === 'PRESENCIA_ONLINE').map(renderContacto)}
-              </>
-            )}
-        
-            {/* Sección CONTACTO DIRECTO */}
-            {contactos && contactos.filter(contacto => contacto.tipo === 'CONTACTO_DIRECTO').length > 0 && (
-              <>
-                <Text style={styles.titleText}>Contacto Directo</Text>
-                {contactos.filter(contacto => contacto.tipo === 'CONTACTO_DIRECTO').map(renderContacto)}
-              </>
-            )}
-          </ScrollView>
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </View>
+        <View className='flex-1 bg-[#f5f5f5]'>
+        {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View> }
+          <SafeAreaView >
+            <ScrollView>
+              {/* Sección PRESENCIA ONLINE */}
+              {contactos && contactos.filter(contacto => contacto.tipo === 'PRESENCIA_ONLINE').length > 0 && (
+                <>
+                  <Text style={styles.titleText}>Presencia Online</Text>
+                  {contactos.filter(contacto => contacto.tipo === 'PRESENCIA_ONLINE').map(renderContacto)}
+                </>
+              )}
+          
+              {/* Sección CONTACTO DIRECTO */}
+              {contactos && contactos.filter(contacto => contacto.tipo === 'CONTACTO_DIRECTO').length > 0 && (
+                <>
+                  <Text style={styles.titleText}>Contacto Directo</Text>
+                  {contactos.filter(contacto => contacto.tipo === 'CONTACTO_DIRECTO').map(renderContacto)}
+                </>
+              )}
+            </ScrollView>
+          </SafeAreaView>
+        </View>
+    </SafeAreaProvider>
   );
 }
 
