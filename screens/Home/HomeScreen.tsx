@@ -82,7 +82,7 @@ export default function HomeScreen({ route }) {
   return (
     <View className="flex-1 bg-[#f5f5f5]" >
       {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default' /> : ''}
-      <View className="pt-16 pb6 px-6 bg-[#11ae40]" style={{ paddingTop: Platform.OS === 'android' ? 25 : 60 }}>
+      <View className="pt-16 pb6 px-6 bg-[#11ae40]" style={{ paddingTop: Platform.OS === 'android' ? 50 : 60 }}>
         <Animated.View className="flex-row justify-between items-center">
           <View>
             <View className="flex-row items-end gap-1">

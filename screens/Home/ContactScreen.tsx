@@ -55,10 +55,10 @@ export default function ContactScreen({ route }) {
   
 
   return (
-      <SafeAreaProvider style={{paddingTop: Platform.OS === 'android' ? 25 : 0}}>
+      <SafeAreaProvider  style={{paddingTop: Platform.OS === 'android' ? 50 : 0}}>
         <View className='flex-1 bg-[#f5f5f5]'>
         {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View> }
-          <SafeAreaView >
+          <SafeAreaView>
             <ScrollView>
               {/* Sección PRESENCIA ONLINE */}
               {contactos && contactos.filter(contacto => contacto.tipo === 'PRESENCIA_ONLINE').length > 0 && (

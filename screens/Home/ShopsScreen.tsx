@@ -62,7 +62,7 @@ export default function ShopsScreen({ route }) {
   }, 600);
 
   return (
-      <SafeAreaProvider>
+      <SafeAreaProvider style={{paddingTop: Platform.OS === 'android' ? 20 : 0}}>
         <View className='flex-1 bg-[#f5f5f5]'>
         {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default' /> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View>}
           <View style={styles.container}>
