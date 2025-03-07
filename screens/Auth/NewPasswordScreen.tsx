@@ -30,52 +30,59 @@ const NewPasswordScreen = ({navigation, route}) => {
         newPassword:newPassword,
         codigo: verificationCode
       }
-      const response = await updatePasswordStepTwo(data);  
-      navigation.navigate('SignIn');
+      const response = await updatePasswordStepTwo(data);
+      // TODO
+      // Respuesta: "El código de verificación es incorrecto o ha expirado"
+      if(response){
+        Alert.alert('Error', 'El código de verificación es incorrecto o ha expirado');
+        navigation.navigate('ForgotPassword');
+      } else if (response){
+        // Respuesta: ok
+        Alert.alert('Éxito', 'Contraseña modificada correctamente');
+        navigation.navigate('SignIn');
+      }
+      
     } catch (error) {
       Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
       console.error('Login error:', error);
     }
-
-    // Aquí iría la lógica para modificar la contraseña, por ejemplo, hacer una llamada a una API.
-
-    Alert.alert('Éxito', 'Contraseña modificada correctamente');
+    
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ingresar código</Text>
-      <Text style={styles.subTitle}>Te enviamos un código de 4 digitos a tu correo electronico {email}</Text>
+      <Text style={styles.subTitle}>Te enviamos un código de 5 digitos a tu correo electrónico: <Text style={{fontWeight: "bold"}}>{email}</Text></Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Código Verificador"
+        placeholder="Código verificador"
         value={verificationCode}
         onChangeText={setVerificationCode}
         keyboardType="numeric"
       />
       <TextInput
         style={styles.input}
-        placeholder="Nueva Contraseña"
+        placeholder="Nueva contraseña"
         secureTextEntry
         value={newPassword}
         onChangeText={setNewPassword}
       />
       <TextInput
         style={styles.input}
-        placeholder="Confirmar Nueva Contraseña"
+        placeholder="Confirmar nueva contraseña"
         secureTextEntry
         value={confirmPassword}
         onChangeText={setConfirmPassword}
       />
 
       <Button
-                    mode="contained"
-                    onPress={handleModifyPassword}
-                    style={styles.button}
-                  >
-                    Enviar codigo
-                  </Button>
+        mode="contained"
+        onPress={handleModifyPassword}
+        style={styles.button}
+      >
+        Enviar código
+      </Button>
     </View>
   );
 };

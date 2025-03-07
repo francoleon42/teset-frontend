@@ -12,11 +12,11 @@ export default function CheckEmailScreen({ navigation }) {
 
   useEffect(() => {
     setSweetAlerOpen(sweetAlerOpen);
-  });
+  },[]);
 
 
   showSweetAlert({
-    title: 'Usuario inexistente',
+    title: 'DNI inexistente',
     text: 'Por favor, llame a Teset para registrarse.',
     showCancelButton: true,
     cancelButtonText: 'Cancelar',
@@ -26,7 +26,6 @@ export default function CheckEmailScreen({ navigation }) {
       setSweetAlerOpen(false);
     },
     onClose: () => {
-      console.log('Cerrado');
       setSweetAlerOpen(false);
     },
     type: 'user', // 'info', 'success', 'danger', veya 'warning' olabilirm, 'user'
@@ -39,16 +38,23 @@ export default function CheckEmailScreen({ navigation }) {
       const response = await registroStepOne(data);
       const email = response.username;
       navigation.navigate('SignUp', { email });
+      console.log(response);
     } catch (error) {
+      console.log(error);
+      // TODO
       if (error == 'El usuario no es cliente'){
-        Alert.alert('Error', 'Por favor, llame al siguiente numero para darte de alta en Teset: 11-3060-4587.', [
-          {
-            text: 'Cancelar',
-            style: 'cancel',
-          },
-          {text: 'Llamar', onPress: () => Linking.openURL('tel:1130604587')},
-        ]);
+        setSweetAlerOpen(true);
+        // Alert.alert('Error', 'Por favor, llame al siguiente numero para darte de alta en Teset: 11-3060-4587.', [
+        //   {
+        //     text: 'Cancelar',
+        //     style: 'cancel',
+        //   },
+        //   {text: 'Llamar', onPress: () => Linking.openURL('tel:1130604587')},
+        // ]);
+      } else if (error == 'El usuario ya esta registrado') {
+        setSweetAlerOpen(true);
       }
+
       setSweetAlerOpen(true);
       // Alert.alert('Error', 'Por favor, ingresa un dni válido.');
       // console.error('Login error:', error);

@@ -10,7 +10,7 @@ export default function TermsAndConditionsScreen({navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Términos y Condiciones</Text>
-      <Text style={styles.subTitle}>Usted esta aceptando todos los términos y condiciones mencionados abajo</Text>
+      <Text style={styles.subTitle}>Usted está aceptando todos los términos y condiciones mencionados abajo</Text>
       <ScrollView>
       <Text>Última actualización: Marzo 2025</Text>
 
@@ -84,7 +84,7 @@ export default function TermsAndConditionsScreen({navigation }) {
       </Text>
       <TouchableOpacity onPress={handleAccept}>
         <Text style={styles.buttonContainer}>
-          <Text style={{ color: '#11ae40' }}>Aceptar términos y condiciones</Text>
+          <Text style={{ color: '#11ae40', fontSize: 17,}}>ACEPTAR TÉRMINOS Y CONDICIONES</Text>
         </Text>
       </TouchableOpacity>
       </ScrollView>
@@ -121,8 +121,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonContainer: {
+    flex:1,
     marginVertical: 20,
     textAlign:'center',
     alignItems: "center",
+    
   },
 });

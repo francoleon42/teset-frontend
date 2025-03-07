@@ -83,7 +83,7 @@ export default function ShopsScreen({ route }) {
               {isLoading ? (
                 <View style={styles.loadingContainer}>
                   <ActivityIndicator size="large" color="#11ae40" />
-                  <Text>Cargando comercios...</Text>
+                  <Text style={{color:'white'}}>CARGANDO COMERCIOS...</Text>
                 </View>
               ) : (
                 <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
@@ -93,14 +93,16 @@ export default function ShopsScreen({ route }) {
                       key={comercio.id}
                     >
                       <ListItem bottomDivider>
-                        <Avatar
-                          rounded
-                          source={
-                            comercio.logo
-                              ? { uri: comercio.logo }
-                              : require('../../assets/images/logoComercioDefault.png')
-                          }
-                        />
+                        <View>
+                          <Avatar
+                            rounded
+                            source={
+                              comercio.logo
+                                ? { uri: comercio.logo }
+                                : require('../../assets/images/iconShops.png')
+                            }
+                          />
+                        </View>
                         <ListItem.Content>
                           <ListItem.Title>{comercio.nombre}</ListItem.Title>
                           <ListItem.Subtitle>{comercio.direccion}</ListItem.Subtitle>

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { loginStepOne, loginStepTwo } from '../../servicios/authService';
 import * as Device from 'expo-device';
+
+
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -31,11 +33,9 @@ const SignInScreen = () => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Por favor, ingrese ambos campos');
-      console.log('deviceID: ' + deviceID);
+      Alert.alert('Error', 'Por favor, ingrese el correo electronico y la contraseña.');
       return;
     }
-    console.log('deviceID: ' + deviceID);
     setLoading(true);
 
     try {
@@ -46,29 +46,29 @@ const SignInScreen = () => {
       };
 
       const responseOne = await loginStepOne(requestloginStepOne);
-      
         
-        if (responseOne.nuevoDispositivo) {
-          navigation.navigate('CheckCode', { email });
-        } else {
-          // Alert.alert('Bienvenido', `Hola, ${email}`);
-          const requestloginStepTwo = {
-            codigo: '12345',
-            username: email,
-            codDispositivo: deviceID,
-          };
+      if (responseOne.nuevoDispositivo) {
+        navigation.navigate('CheckCode', { email });
+      } else {
+        const requestloginStepTwo = {
+          codigo: '12345',
+          username: email,
+          codDispositivo: deviceID,
+        };
 
-          const responseTwo = await loginStepTwo(requestloginStepTwo);
+        const responseTwo = await loginStepTwo(requestloginStepTwo);
 
-          if (responseTwo.role === 'CLIENTE') {
-            navigation.navigate('Root', { token: responseTwo.token });
-          }
+        if (responseTwo.role === 'CLIENTE') {
+          navigation.navigate('Root', { token: responseTwo.token });
         }
-      
+        // Nunca guardamos el email y password
+        setEmail('');
+        setPassword('');
+
+      }
       
     } catch (error) {
-      Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intenta más tarde.');
-      // console.error('Login error:', error);
+      Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intente más tarde.');
     } finally {
       setLoading(false);
     }
@@ -76,12 +76,10 @@ const SignInScreen = () => {
 
   const handleForgotPassword = () => {
     navigation.navigate('ForgotPassword');
-    // Alert.alert('Recuperación de contraseña', 'Se enviará un enlace para recuperar tu contraseña al correo ingresado');
   };
 
   const handleRegister = () => {
     navigation.navigate('TermsAndConditions');
-    // Alert.alert('Registro', 'Serás redirigido a la pantalla de registro');
   };
 
   return (
@@ -128,6 +126,7 @@ const SignInScreen = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -179,6 +178,5 @@ const styles = StyleSheet.create({
     textAlign:'center',
   },
 });
-
 
 export default SignInScreen;

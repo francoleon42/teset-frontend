@@ -29,7 +29,6 @@ export default function ContactScreen({ route }) {
     const { tipo, titulo, subTitulo, logoLink, link } = contacto;
     
     const handlePress = () => {
-      console.log(link);
       if (typeof link === 'string' && link.trim() !== '') {
       
         Linking.openURL(link).catch((err) => {
@@ -55,8 +54,8 @@ export default function ContactScreen({ route }) {
   
 
   return (
-      <SafeAreaProvider  style={{paddingTop: Platform.OS === 'android' ? 50 : 0}}>
-        <View className='flex-1 bg-[#f5f5f5]'>
+      <SafeAreaProvider  style={{paddingTop: Platform.OS === 'android' ? 35 : 0, backgroundColor:'#ffffff'}}>
+        <View className='flex-1 bg-[#ffffff]'>
         {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default'/> : <View className="pt-16 pb6 px-6 bg-[#11ae40]"></View> }
           <SafeAreaView>
             <ScrollView>
@@ -87,9 +86,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: StatusBar.currentHeight,
   },
-  scrollView: {
-    backgroundColor: 'white',
-  },
   text: {
     fontSize: 30,
     padding: 12,
@@ -97,17 +93,19 @@ const styles = StyleSheet.create({
   titleText: {
     width: "100%",
     textAlign: "center",
-    fontSize: 15,
-    paddingVertical: 5,
+    fontSize: 18,
+    padding: '7%',
+    margin: 'auto',
     color: "black",
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
     backgroundColor: '#ffffff',
+    borderRadius: 20,
   },
-      droidSafeArea: {
-        flex: 1,
-        backgroundColor: '#11ae40',
-        paddingTop: Platform.OS === 'android' ? 25 : 0
-    },
+    droidSafeArea: {
+      flex: 1,
+      backgroundColor: '#11ae40',
+      paddingTop: Platform.OS === 'android' ? 25 : 0
+  },
 });

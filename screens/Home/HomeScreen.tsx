@@ -6,7 +6,6 @@ import { getCliente, getClienteDetalle } from '../../servicios/clienteService';
 import { logout } from '../../servicios/authService';
 import { Emoji } from '../../components/Emoji/Emoji';
 import StyleCard from '../../components/Card/StyleCard';
-import Card from '../../components/Card/Card';
 import Slider from '../../components/Silder/Slider';
 import Modal from '../Components/modal';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -68,13 +67,10 @@ export default function HomeScreen({ route }) {
   const onModalClose = () => setIsModalVisible(false);
 
   const callLogout = async () => {
-    console.log('logout')
     try {
       const responseLogout = logout(token);
       navigation.navigate('SignIn');
     } catch (error) {
-      console.log(error);
-
       Alert.alert('Error', 'Error al cerrar sesion, cierre y abra la aplicacion.');
     }
   };
@@ -82,7 +78,7 @@ export default function HomeScreen({ route }) {
   return (
     <View className="flex-1 bg-[#f5f5f5]" >
       {Platform.OS === 'android' ? <StatusBar backgroundColor="#11ae40" barStyle='default' /> : ''}
-      <View className="pt-16 pb6 px-6 bg-[#11ae40]" style={{ paddingTop: Platform.OS === 'android' ? 50 : 60 }}>
+      <View className="pt-16 pb6 px-6 bg-[#11ae40]" style={{ paddingTop: Platform.OS === 'android' ? 35 : 60 }}>
         <Animated.View className="flex-row justify-between items-center">
           <View>
             <View className="flex-row items-end gap-1">
@@ -111,18 +107,16 @@ export default function HomeScreen({ route }) {
           subtitle="DISPONIBLE PARA COMPRAS 🛒"
           text="Podes ir a comprar a cualquier comercio adherido"
         />
-        <Card
-          subtitle="RESUMEN DE CUENTA"
+        <StyleCard
+          title="Resumen de cuenta"
+          subtitle={
+              <Text>A pagar al día de la fecha:  <Text style={{ fontWeight: 'bold' }}>${clientData?.saldoAPagar || '0'}</Text></Text>
+          }
           text={
-            <>
-              <Text>-Saldo a pagar a la fecha:  <Text style={{ fontWeight: 'bold' }}>${clientData?.saldoAPagar || '0'}</Text></Text>
-              {"\n"}
-              <Text>-Próximo vencimiento: <Text style={{ fontWeight: 'bold' }}>{clientData?.fechadeProximoVencimiento || '0/00/0000'} - </Text>
-                <Text style={{ fontWeight: 'bold' }}>{"$"+clientData?.importePxVto || '$0'}</Text></Text>
-            </>
+            <Text>El próximo vencimiento es el <Text style={{ fontWeight: 'bold' }}>{clientData?.fechadeProximoVencimiento || '00/00/0000'} </Text>
+                y el monto a pagar sera de <Text style={{ fontWeight: 'bold' }}>{"$"+clientData?.importePxVto || '$0'}</Text></Text>
           }
         />
-
 
         <TouchableOpacity style={styles.appButtonContainer} onPress={onShowAccountDetail}>
           <Text style={styles.appButtonText}>Ver detalle de cuenta</Text>
@@ -186,8 +180,8 @@ const styles = StyleSheet.create({
   },
   fila: {
     flexDirection: 'row',
-    paddingVertical: 5,
-    // paddingHorizontal: 10,
+    paddingVertical: 9,
+    paddingHorizontal: 1,
     borderBottomWidth: 1,
     borderBottomColor: '#11ae40',
     justifyContent: 'space-between',
@@ -197,7 +191,7 @@ const styles = StyleSheet.create({
   },
   columna: {
     // flex: 5,
-    fontSize: RFPercentage(1.4),
+    fontSize: RFPercentage(1.7),
     textAlign: 'center',
   },
 });

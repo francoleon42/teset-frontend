@@ -23,7 +23,6 @@ export default function CheckCodeScreen({ route, navigation }) {
       const response = await loginStepTwo(requestData);
 
       if (response.role == "CLIENTE") {
-        console.log("TOKEN:", response.token);
         navigation.navigate('Root', { token: response.token });
       }
       // Lógica después de la verificación
@@ -42,7 +41,7 @@ export default function CheckCodeScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Código verificador</Text>
-      <Text style={styles.subTitle}>Por favor, ingrese el codigo enviado al correo electronico:</Text>
+      <Text style={styles.subTitle}>Por favor, ingrese el código enviado al correo electrónico:</Text>
 
       <TextInput
         style={styles.input}
@@ -58,7 +57,7 @@ export default function CheckCodeScreen({ route, navigation }) {
         onPress={handleSubmit}
         style={styles.button}
       >
-        Verificar codigo
+        Verificar código
       </Button>
       <TouchableOpacity
         style={styles.link}

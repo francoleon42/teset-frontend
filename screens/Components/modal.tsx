@@ -17,9 +17,9 @@ export default function modal({ isVisible, children, onClose }: Props) {
         <Modal animationType="slide" transparent={true} visible={isVisible} onRequestClose={() => {onClose}}>
           <View style={styles.modalContent}>
             <View style={styles.titleContainer}>
-              <Text style={styles.title}>Detalle de la Cuenta</Text>
+              <Text style={styles.title}>Detalle de cuenta</Text>
               <Pressable onPress={onClose}>
-                <MaterialIcons name="close" color="#fff" size={22} />
+                <MaterialIcons name="close" color="#fff" size={28} />
               </Pressable>
             </View>
             {children}
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    height: '50%',
+    height: '60%',
     width: '100%',
     backgroundColor: '#f5f5f5',
     borderTopRightRadius: 18,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     
   },
   titleContainer: {
-    height: '10%',
+    height: 40,
     backgroundColor: '#11ae40',
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 20,
+    alignItems: 'flex-start',
   },
   
 });
