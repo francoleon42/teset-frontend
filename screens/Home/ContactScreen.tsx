@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
   titleText: {
     width: "100%",
     textAlign: "center",
-    fontSize: 18,
-    padding: '7%',
+    fontSize: 23,
+    paddingTop: 30,
     margin: 'auto',
     color: "black",
     fontWeight: "bold",

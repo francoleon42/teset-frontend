@@ -114,7 +114,7 @@ export default function HomeScreen({ route }) {
           }
           text={
             <Text>El próximo vencimiento es el <Text style={{ fontWeight: 'bold' }}>{clientData?.fechadeProximoVencimiento || '00/00/0000'} </Text>
-                y el monto a pagar sera de <Text style={{ fontWeight: 'bold' }}>{"$"+clientData?.importePxVto || '$0'}</Text></Text>
+                y el monto a pagar será de <Text style={{ fontWeight: 'bold' }}>{"$"+clientData?.importePxVto || '$0'}</Text></Text>
           }
         />
 

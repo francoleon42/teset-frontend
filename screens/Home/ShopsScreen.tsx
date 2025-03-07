@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, Text, ScrollView, Platform, Pressable, View, TextInput, Linking, SafeAreaView, StatusBar, ActivityIndicator } from 'react-native';
-import { Avatar, ListItem } from '@rneui/themed';
+import { ListItem } from '@rneui/themed';
+import { Avatar } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { getComerciosAdheridos, getComerciosAdheridosByName } from '../../servicios/negocioService';
 import { debounce } from 'lodash'; 
@@ -93,14 +94,18 @@ export default function ShopsScreen({ route }) {
                       key={comercio.id}
                     >
                       <ListItem bottomDivider>
-                        <View>
-                          <Avatar
-                            rounded
+                        <View style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-around',
+                        }}>
+                          <Avatar.Image
+                            size={50}
                             source={
                               comercio.logo
                                 ? { uri: comercio.logo }
                                 : require('../../assets/images/iconShops.png')
                             }
+                            style={{backgroundColor:'white'}}
                           />
                         </View>
                         <ListItem.Content>
