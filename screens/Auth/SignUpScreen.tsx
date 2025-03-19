@@ -30,7 +30,6 @@ const SignUpScreen = ({ navigation, route }) => {
 
     } catch (error) {
       Alert.alert('Error', 'Por favor, ingresa el codigo válido.');
-      console.error('Login error:', error);
     }
   };
 

@@ -36,17 +36,11 @@ const getFetchOptions = (method, data, token) => {
 
 const handleResponse = async (response, statusExpected) => {
     const status = response.status
-
+    
     if (status !== statusExpected) {
-        try {
-            const errorData = await response.json();
-
-            if (errorData.message) {
-                throw new Error(`Error en la solicitud: ${errorData.message}`);
-            }
-        } catch (e) {
-            throw new Error(`Error en la solicitud: ${response.statusText}`);
-        }
+        const errorData = await response.json();
+        throw new Error(`Error: ${errorData.message}, status: ${errorData.status}`);
+    
     }
 
     if (response.status === 204 || response.headers.get("content-length") === "0") {

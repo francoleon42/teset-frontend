@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { loginStepOne, loginStepTwo } from '../../servicios/authService';
 import * as Device from 'expo-device';
-
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 type RootStackParamList = {
@@ -24,12 +24,22 @@ type NavigationProp = StackNavigationProp<RootStackParamList, 'SignIn'>;
 
 const SignInScreen = () => {
   const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   
   const navigation = useNavigation<NavigationProp>();
 
   const deviceID = Device.osInternalBuildId.toString().trim();
+
+  // State variable to hold the password
+  const [password, setPassword] = useState('');
+
+  // State variable to track password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Function to toggle the password visibility state
+  const toggleShowPassword = () => {
+      setShowPassword(!showPassword);
+  };
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -46,7 +56,7 @@ const SignInScreen = () => {
       };
 
       const responseOne = await loginStepOne(requestloginStepOne);
-        
+      
       if (responseOne.nuevoDispositivo) {
         navigation.navigate('CheckCode', { email });
       } else {
@@ -55,13 +65,14 @@ const SignInScreen = () => {
           username: email,
           codDispositivo: deviceID,
         };
-
+        
         const responseTwo = await loginStepTwo(requestloginStepTwo);
-
+        
+        
         if (responseTwo.role === 'CLIENTE') {
           navigation.navigate('Root', { token: responseTwo.token });
         }
-        // Nunca guardamos el email y password
+        // Nunca recordamos el email y password
         setEmail('');
         setPassword('');
 
@@ -95,15 +106,24 @@ const SignInScreen = () => {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
+      <View>
+        <TextInput
+          style={styles.input}
+          placeholder={"Contraseña"}
+          autoCorrect={false}
+          textContentType='password'
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+        />
+        <MaterialCommunityIcons
+          name={showPassword ? 'eye-off' : 'eye'}
+          size={24}
+          color="#11ae40"
+          style={styles.icon}
+          onPress={toggleShowPassword}
+        />
+      </View>
       <TouchableOpacity onPress={handleForgotPassword}>
         <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
@@ -161,6 +181,11 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderColor:'#EBEBEB',
     backgroundColor:'#FAFAFA',
+  },
+  icon: {
+    position: 'absolute',
+    right: '5%',
+    top:'35%',
   },
   button: {
     width: '100%',

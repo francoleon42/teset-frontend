@@ -18,6 +18,7 @@ export default function modal({ isVisible, children, onClose }: Props) {
           <View style={styles.modalContent}>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>Detalle de cuenta</Text>
+              
               <Pressable onPress={onClose}>
                 <MaterialIcons name="close" color="#fff" size={28} />
               </Pressable>
@@ -37,18 +38,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    height: '60%',
+    height: '65%',
     width: '100%',
     backgroundColor: '#f5f5f5',
     borderTopRightRadius: 18,
     borderTopLeftRadius: 18,
     position: 'absolute',
     bottom: 0,
-    // fontSize: 10,
-    
   },
   titleContainer: {
-    height: 40,
+    height: 30,
     backgroundColor: '#11ae40',
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
@@ -56,12 +55,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    // fontSize: 10,
   },
   title: {
     color: '#fff',
-    fontSize: 20,
-    alignItems: 'flex-start',
+    fontSize: 16,
+    alignItems: 'center',
+    textAlign:'center',
+    justifyContent:'center',
+    paddingLeft: '30%',
   },
   
 });

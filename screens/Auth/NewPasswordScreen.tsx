@@ -30,29 +30,21 @@ const NewPasswordScreen = ({navigation, route}) => {
         newPassword:newPassword,
         codigo: verificationCode
       }
-      const response = await updatePasswordStepTwo(data);
-      // TODO
-      // Respuesta: "El código de verificación es incorrecto o ha expirado"
-      if(response){
-        Alert.alert('Error', 'El código de verificación es incorrecto o ha expirado');
-        navigation.navigate('ForgotPassword');
-      } else if (response){
-        // Respuesta: ok
-        Alert.alert('Éxito', 'Contraseña modificada correctamente');
-        navigation.navigate('SignIn');
-      }
       
+      const response = await updatePasswordStepTwo(data);
+      Alert.alert('Éxito', 'Contraseña modificada correctamente');
+      navigation.navigate('SignIn');
+
     } catch (error) {
-      Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
-      console.error('Login error:', error);
+      Alert.alert('Error', 'Ha ocurrido un error inesperado.');
     }
-    
+  
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ingresar código</Text>
-      <Text style={styles.subTitle}>Te enviamos un código de 5 digitos a tu correo electrónico: <Text style={{fontWeight: "bold"}}>{email}</Text></Text>
+      <Text style={styles.title}>Cambiar contraseña</Text>
+      <Text style={styles.subTitle}>Te enviamos un código de 5 digitos a tu correo electrónico: <Text style={{fontWeight: "bold"}}>{email.slice(0,3)}*********{email.slice(email.indexOf("@"),1000)}</Text></Text>
 
       <TextInput
         style={styles.input}
@@ -81,7 +73,7 @@ const NewPasswordScreen = ({navigation, route}) => {
         onPress={handleModifyPassword}
         style={styles.button}
       >
-        Enviar código
+        Cambiar contraseña
       </Button>
     </View>
   );

@@ -11,6 +11,7 @@ import Modal from '../Components/modal';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { color } from '@rneui/base';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -35,6 +36,8 @@ export default function HomeScreen({ route }) {
 
   const [clientData, setClientData] = useState<any>(null);
   const [clientDetalle, setClientDetalle] = useState<any>(null);
+  const [clientDetalleCuenta, setClientDetalleCuenta] = useState<any>(null);
+  const [clientDetalleroxVenc, setClientDetalleProxVenc] = useState<any>(null);
   const { token } = route.params;
   const [useToken, setToken] = useState<string>(token);
 
@@ -47,6 +50,7 @@ export default function HomeScreen({ route }) {
         setClientData(responseClienteData);
 
         const responseClienteDetalle = await getClienteDetalle(token);
+
         setClientDetalle(responseClienteDetalle);
 
       } catch (error) {
@@ -121,30 +125,56 @@ export default function HomeScreen({ route }) {
         <TouchableOpacity style={styles.appButtonContainer} onPress={onShowAccountDetail}>
           <Text style={styles.appButtonText}>Ver detalle de cuenta</Text>
         </TouchableOpacity>
-        <TouchableWithoutFeedback>
+
           <Modal isVisible={isModalVisible} onClose={onModalClose}>
+
+            {/* titulos */}
+            <View style={styles.titles}>
+              <Text style={styles.columna}>Emisión</Text>
+              <Text style={styles.columna}>Sec</Text>
+              <Text style={styles.columna}>Comercio</Text>
+              <Text style={styles.columna}>Saldo Actual</Text>
+            </View>
+              
             <FlatList
               style={styles.container}
               data={clientDetalle}
               // keyExtractor={item => item.id}
               renderItem={({ item, index }) => (
-                <View style={styles.fila} key={clientDetalle.id}>
+
+                <View style={styles.fila} key={clientDetalle.id}> 
                   <Text style={styles.columna}>{item.fechaEmision}</Text>
                   <Text style={styles.columna}>{item.secuencia}</Text>
                   <Text style={styles.columna}>{item.codCom}</Text>
-                  <Text style={styles.columna}>${item.importe.toFixed(2)}</Text>
-                  <Text style={styles.columna}>
-                    <View>
-                      <Text style={styles.columna}>${item.importePxVto.toFixed(2)}</Text>
-                      <Text style={styles.columna}>{item.fechadeProximoVencimiento}</Text>
-                      <Text style={styles.columna}>{item.cuota}</Text>
-                    </View>
-                  </Text>
+                  <Text style={styles.columna}>${item.importe.toFixed(2)}</Text>                
                 </View>
               )}
             />
+            <Text style={{position: 'absolute', right: '5%', top:'38%',}}>Total:  <Text style={{ fontWeight: 'bold' }}>${clientData?.saldoAPagar || '0'}</Text></Text>
+            <Text style={{width: '100%',position: 'absolute', right: '0%', top:'48%',color: '#fff',fontSize: 16,backgroundColor: '#11ae40',borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,textAlign:'center',height:28}}>Prox. vencimiento: <Text style={{ fontWeight: 'bold' }}>{clientData?.fechadeProximoVencimiento || '00/00/0000'} </Text></Text>
+            {/* titulos */}
+            <View style={styles.titles}>
+              <Text style={styles.columna}>Cuota</Text>
+              <Text style={styles.columna}>Sec</Text>
+              <Text style={styles.columna}>Comercio</Text>
+              <Text style={styles.columna}>Imp. Cuota</Text>
+            </View>
+             
+            <FlatList
+            style={styles.container}
+            data={clientDetalle}
+            renderItem={({ item, index }) => (
+              <View style={styles.fila} key={clientDetalle.id}>
+                <Text style={styles.columna}>{item.cuota}</Text>
+                <Text style={styles.columna}>{item.secuencia}</Text>
+                <Text style={styles.columna}>{item.codCom}</Text>
+                <Text style={styles.columna}>${item.importePxVto.toFixed(2)}</Text>
+              </View>
+            )}
+            />
+            <Text style={{position: 'absolute', right: '5%', top:'85%',}}>Total:  <Text style={{ fontWeight: 'bold' }}>{"$"+clientData?.importePxVto || '$0'}</Text></Text>
           </Modal>
-        </TouchableWithoutFeedback>
       </ScrollView>
     </View>
   );
@@ -176,16 +206,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    paddingVertical: 5,
     backgroundColor: '#f5f5f5',
+    
   },
   fila: {
     flexDirection: 'row',
-    paddingVertical: 9,
+    paddingVertical: 6,
     paddingHorizontal: 1,
     borderBottomWidth: 1,
     borderBottomColor: '#11ae40',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    // alignItems: 'center',
     // flex: 5,
     // fontSize: RFPercentage(1.3),
   },
@@ -193,5 +225,15 @@ const styles = StyleSheet.create({
     // flex: 5,
     fontSize: RFPercentage(1.7),
     textAlign: 'center',
+  },
+  titles: {
+    flexDirection: 'row',
+    paddingVertical: 2,
+    
+    paddingHorizontal: 1,
+    borderBottomWidth: 3,
+    borderBottomColor: '#11ae40',
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
   },
 });
