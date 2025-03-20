@@ -151,8 +151,7 @@ export default function HomeScreen({ route }) {
               )}
             />
             <Text style={{position: 'absolute', right: '5%', top:'38%',}}>Total:  <Text style={{ fontWeight: 'bold' }}>${clientData?.saldoAPagar || '0'}</Text></Text>
-            <Text style={{width: '100%',position: 'absolute', right: '0%', top:'48%',color: '#fff',fontSize: 16,backgroundColor: '#11ae40',borderTopRightRadius: 15,
-    borderTopLeftRadius: 15,textAlign:'center',height:28}}>Prox. vencimiento: <Text style={{ fontWeight: 'bold' }}>{clientData?.fechadeProximoVencimiento || '00/00/0000'} </Text></Text>
+            <Text style={{width: '100%',position: 'absolute', right: '0%', top:'48%',color: '#fff',fontSize: 16,backgroundColor: '#11ae40',borderTopRightRadius: 15,borderTopLeftRadius: 15,textAlign:'center',height:28}}>Prox. vencimiento: <Text style={{ fontWeight: 'bold' }}>{clientData?.fechadeProximoVencimiento || '00/00/0000'} </Text></Text>
             {/* titulos */}
             <View style={styles.titles}>
               <Text style={styles.columna}>Cuota</Text>

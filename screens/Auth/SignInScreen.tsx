@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { loginStepOne, loginStepTwo } from '../../servicios/authService';
 import * as Device from 'expo-device';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import SweetAlert, { showSweetAlert } from '../../components/Sweet Alert/SweetAlert';
 
 
 type RootStackParamList = {
@@ -22,13 +23,22 @@ type RootStackParamList = {
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'SignIn'>;
 
+
+
 const SignInScreen = () => {
   const [email, setEmail] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  
   const navigation = useNavigation<NavigationProp>();
-
   const deviceID = Device.osInternalBuildId.toString().trim();
+
+  // Alert
+  const [sweetAlertOpen, setSweetAlertOpen] = useState(false);
+  const [textAlert, setTextAlert] = useState('');
+  useEffect(() => {
+      setTimeout(() => {
+        setSweetAlertOpen(sweetAlertOpen);
+    }, 0)
+    },[sweetAlertOpen]);
 
   // State variable to hold the password
   const [password, setPassword] = useState('');
@@ -41,9 +51,25 @@ const SignInScreen = () => {
       setShowPassword(!showPassword);
   };
 
+  showSweetAlert({
+      title: 'Atención',
+      text: textAlert,
+      showCancelButton: false,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Aceptar',
+      onConfirm: () => {
+        setSweetAlertOpen(false);
+      },
+      onClose: () => {
+        setSweetAlertOpen(false);
+      },
+      type: 'warning', // 'info', 'success', 'danger', veya 'warning' olabilirm, 'user'
+    });
+
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Por favor, ingrese el correo electronico y la contraseña.');
+      setTextAlert('Por favor, ingrese el correo electronico y la contraseña.')
+      setSweetAlertOpen(true);
       return;
     }
     setLoading(true);
@@ -79,7 +105,14 @@ const SignInScreen = () => {
       }
       
     } catch (error) {
-      Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intente más tarde.');
+      
+      if(error.message.includes("Bad credentials")){
+        setTextAlert('Usuario o Contraseña incorrectos.')
+        setSweetAlertOpen(true);
+      } else {
+        setTextAlert('No se pudo completar el inicio de sesión. Por favor, intente más tarde.')
+        setSweetAlertOpen(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -143,6 +176,9 @@ const SignInScreen = () => {
           ¿No tienes una cuenta? <Text style={{ color: '#11ae40' }}>Regístrate</Text>
         </Text>
       </TouchableOpacity>
+
+      {sweetAlertOpen && <SweetAlert/>}
+
     </View>
   );
 };
@@ -184,7 +220,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: 'absolute',
-    right: '5%',
+    right: '8%',
     top:'35%',
   },
   button: {

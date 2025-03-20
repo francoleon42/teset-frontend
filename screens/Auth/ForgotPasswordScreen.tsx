@@ -11,7 +11,9 @@ export default function ForgotPasswordScreen({ navigation }) {
   const [sweetAlerVisible, setSweetAlerVisible] = useState(false);
 
   useEffect(() => {
-    setSweetAlerVisible(sweetAlerVisible);
+    setTimeout(() => {
+      setSweetAlerVisible(sweetAlerVisible);
+    }, 0)
   }, [sweetAlerVisible]);
 
   showSweetAlert({
@@ -34,7 +36,6 @@ export default function ForgotPasswordScreen({ navigation }) {
     try {
       const data = { dni };
       const response = await updatePasswordStepOne(data);
-      console.log(response);
       
       const email = response.username;
       navigation.navigate('NewPassword', { email, dni });

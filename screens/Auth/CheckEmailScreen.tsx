@@ -16,7 +16,9 @@ export default function CheckEmailScreen({ navigation }) {
   const [showCancelButton, setShowCancelButton] = useState(true);
 
   useEffect(() => {
-    setSweetAlerOpen(sweetAlerOpen);
+    setTimeout(() => {
+      setSweetAlerOpen(sweetAlerOpen);
+    }, 0)
   },[sweetAlerOpen]);
 
 
@@ -57,12 +59,22 @@ export default function CheckEmailScreen({ navigation }) {
         setShowCancelButton(false);
         setSweetAlerOpen(true);
       } else if (error.message.includes("El usuario no es cliente")){
-        setTitleAlert('Usted no es cliente')
-        setTextAlert('Por favor, envie un mensaje a Teset para que lo ayuden.')
-        setTypeAlert("danger");
-        setConfirminButtonText('Enviar');
-        setShowCancelButton(true);
-        setSweetAlerOpen(true);
+        if(dni.length > 0){
+          setTitleAlert('Usted no es cliente')
+          setTextAlert('Por favor, envie un mensaje a Teset para que lo ayuden.')
+          setTypeAlert("danger");
+          setConfirminButtonText('Enviar');
+          setShowCancelButton(true);
+          setSweetAlerOpen(true);
+        } else {
+          setTitleAlert('Atención')
+          setTextAlert('Por favor, ingrese un DNI.')
+          setTypeAlert("warning");
+          setConfirminButtonText('Aceptar');
+          setShowCancelButton(false);
+          setSweetAlerOpen(true);
+        }
+        
       } else {
         setTitleAlert('Atención')
         setTextAlert('Por favor, envie un mesanje a Teset para que le den soporte.')
