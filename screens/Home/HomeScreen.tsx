@@ -50,7 +50,7 @@ export default function HomeScreen({ route }) {
         setClientData(responseClienteData);
 
         const responseClienteDetalle = await getClienteDetalle(token);
-
+        
         setClientDetalle(responseClienteDetalle);
 
       } catch (error) {

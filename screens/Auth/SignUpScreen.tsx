@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { Button } from 'react-native-paper';
 import { registroStepTwo } from '../../servicios/authService';
+import SweetAlert, { showSweetAlert } from '../../components/Sweet Alert/SweetAlert';
 
 //registro step two
 const SignUpScreen = ({ navigation, route }) => {
@@ -9,12 +10,44 @@ const SignUpScreen = ({ navigation, route }) => {
   const [password, setPassword] = useState<string>('');
   const [verificationCode, setVerificationCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  // Alert
+  const [sweetAlertOpen, setSweetAlertOpen] = useState(false);
+  const [titleAlert, setTitleAlert] = useState('Atención');
+  const [textAlert, setTextAlert] = useState('');
+  const [typeAlert, setTypeAlert] = useState(null);
+  
+  useEffect(() => {
+      setTimeout(() => {
+        setSweetAlertOpen(sweetAlertOpen);
+    }, 0)
+    },[sweetAlertOpen]);
+
+  showSweetAlert({
+        title: titleAlert,
+        text: textAlert,
+        showCancelButton: false,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Aceptar',
+        onConfirm: () => {
+          if(titleAlert == "Éxito"){
+            navigation.navigate('SignIn');
+          }
+          setSweetAlertOpen(false);
+        },
+        onClose: () => {
+          setSweetAlertOpen(false);
+        },
+        type: typeAlert, // 'info', 'success', 'danger', veya 'warning' olabilirm, 'user'
+      });
 
   const { email } = route.params;
 
   const handleSignUp = async () => {
     if (!password || !verificationCode) {
-      Alert.alert('Error', 'Por favor, complete todos los campos.');
+      setTitleAlert('Error');
+      setTextAlert('Todos los campos son requeridos.');
+      setTypeAlert("warning");
+      setSweetAlertOpen(true);
       return;
     }
 
@@ -26,10 +59,25 @@ const SignUpScreen = ({ navigation, route }) => {
       }
       const response = await registroStepTwo(data);
       
-      navigation.navigate('SignIn');
+      setTitleAlert('Éxito');
+      setTextAlert('Usuario creado.');
+      setTypeAlert("success");
+      setSweetAlertOpen(true);
 
     } catch (error) {
-      Alert.alert('Error', 'Por favor, ingresa el codigo válido.');
+      
+      if(error.message.includes("incorrecto o ha expirado")){
+        setTitleAlert('Incorrecto o ha expirado')
+        setTextAlert('El código de verificación es incorrecto o ha expirado.')
+        setTypeAlert("warning");
+        setSweetAlertOpen(true);
+      } else {
+        setTitleAlert('Error')
+        setTextAlert('Ha ocurrido un error inesperado.')
+        setTypeAlert("danger");
+        setSweetAlertOpen(true);
+      }
+
     }
   };
 
@@ -53,7 +101,7 @@ const SignUpScreen = ({ navigation, route }) => {
 
       {/* Input para el código verificador */}
       <TextInput
-        placeholder="Código Verificador"
+        placeholder="Código verificador"
         placeholderTextColor={'#929292'}
         value={verificationCode}
         onChangeText={setVerificationCode}
@@ -69,8 +117,10 @@ const SignUpScreen = ({ navigation, route }) => {
         disabled={loading}
         style={styles.button}
       >
-        Crear Cuenta
+        Crear cuenta
       </Button>
+
+      {sweetAlertOpen && <SweetAlert/>}
 
     </View>
   );

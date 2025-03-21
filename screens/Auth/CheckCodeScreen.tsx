@@ -1,15 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
 import { loginStepTwo } from '../../servicios/authService';
 import * as Device from 'expo-device';
-
+import SweetAlert, { showSweetAlert } from '../../components/Sweet Alert/SweetAlert';
 
 //login step two 
 export default function CheckCodeScreen({ route, navigation }) {
   const [codigo, setCodigo] = useState('');
   const { email } = route.params;
   const deviceID = Device.osInternalBuildId.toString().trim();
+  const [sweetAlerVisible, setSweetAlerVisible] = useState(false);
+
+  useEffect(() => {
+      setTimeout(() => {
+        setSweetAlerVisible(sweetAlerVisible);
+      }, 0)
+    }, [sweetAlerVisible]);
+
+  showSweetAlert({
+        title: 'Código incorrecto o ha expirado',
+        text: 'Por favor, volve a intentarlo.',
+        showCancelButton: false,
+        cancelButtonText: 'Cerrar',
+        confirmButtonText: 'Cerrar',
+        onConfirm: () => {
+          setSweetAlerVisible(!sweetAlerVisible);
+        },
+        onClose: () => {
+          setSweetAlerVisible(!sweetAlerVisible);
+        },
+        type: 'warning', // 'info', 'success', 'danger', veya 'warning' olabilirm, 'user'
+      });
+
   const handleSubmit = async () => {
 
     try {
@@ -25,14 +48,11 @@ export default function CheckCodeScreen({ route, navigation }) {
       if (response.role == "CLIENTE") {
         navigation.navigate('Root', { token: response.token });
       }
-      // Lógica después de la verificación
-      // Alert.alert('Éxito', 'Correo verificado con éxito. ' + `Hola, ${email}`, [
-      //   { text: 'OK', onPress: () => navigation.navigate('Inicio') },
-      // ]);
-      // navigation.navigate('Inicio');
     } catch (error) {
-      Alert.alert('Error', 'No se pudo completar el inicio de sesión. Por favor, intenta más tarde.');
-      console.error('Login error:', error);
+      if(error.message.includes("incorrecto o ha expirado")){
+        setSweetAlerVisible(true);
+      }
+      
       return; // Evita continuar si hay un error
     }
   };
@@ -65,6 +85,9 @@ export default function CheckCodeScreen({ route, navigation }) {
       >
         <Text style={styles.linkText}>Volver al inicio de sesión</Text>
       </TouchableOpacity>
+
+      {sweetAlerVisible && <SweetAlert/>}
+
     </View>
   );
 }

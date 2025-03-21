@@ -1,26 +1,60 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
 import { updatePasswordStepTwo } from '../../servicios/authService';
-
+import SweetAlert, { showSweetAlert } from '../../components/Sweet Alert/SweetAlert';
 
 //update step two
 const NewPasswordScreen = ({navigation, route}) => {
   const [verificationCode, setVerificationCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [sweetAlerVisible, setSweetAlerVisible] = useState(false);
+  const [titleAlert, setTitleAlert] = useState('');
+  const [textAlert, setTextAlert] = useState('');
+  const [typeAlert, setTypeAlert] = useState(null);
   
+    useEffect(() => {
+        setTimeout(() => {
+          setSweetAlerVisible(sweetAlerVisible);
+        }, 0)
+      }, [sweetAlerVisible]);
+  
+    showSweetAlert({
+          title: titleAlert,
+          text: textAlert,
+          showCancelButton: false,
+          cancelButtonText: 'Cerrar',
+          confirmButtonText: 'Cerrar',
+          onConfirm: () => {
+            
+            if(titleAlert == "Éxito"){
+              navigation.navigate('SignIn');
+            }
+            setSweetAlerVisible(!sweetAlerVisible);
+          },
+          onClose: () => {
+            setSweetAlerVisible(!sweetAlerVisible);
+          },
+          type: typeAlert, // 'info', 'success', 'danger', veya 'warning' olabilirm, 'user'
+        });
  
   const { email,dni } = route.params;
 
   const handleModifyPassword = async () => {
     if (!verificationCode || !newPassword || !confirmPassword) {
-      Alert.alert('Error', 'Todos los campos son requeridos');
+      setTitleAlert('Error')
+      setTextAlert('Todos los campos son requeridos.')
+      setTypeAlert("warning");
+      setSweetAlerVisible(true);
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      Alert.alert('Error', 'Las contraseñas no coinciden');
+      setTitleAlert('Error')
+      setTextAlert('Las contraseñas no coinciden.')
+      setTypeAlert("warning");
+      setSweetAlerVisible(true);
       return;
     }
 
@@ -32,14 +66,24 @@ const NewPasswordScreen = ({navigation, route}) => {
       }
       
       const response = await updatePasswordStepTwo(data);
-      Alert.alert('Éxito', 'Contraseña modificada correctamente');
-      navigation.navigate('SignIn');
-
+      setTitleAlert('Éxito')
+      setTextAlert('Contraseña modificada correctamente.')
+      setTypeAlert("success");
+      setSweetAlerVisible(true);
     } catch (error) {
-      Alert.alert('Error', 'Ha ocurrido un error inesperado.');
+      if(error.message.includes("incorrecto o ha expirado")){
+        setTitleAlert('Incorrecto o ha expirado')
+        setTextAlert('El código de verificación es incorrecto o ha expirado.')
+        setTypeAlert("warning");
+        setSweetAlerVisible(true);
+    } else {
+      setTitleAlert('Error')
+      setTextAlert('Ha ocurrido un error inesperado.')
+      setTypeAlert("danger");
+      setSweetAlerVisible(true);
     }
   
-  };
+  }};
 
   return (
     <View style={styles.container}>
@@ -75,6 +119,9 @@ const NewPasswordScreen = ({navigation, route}) => {
       >
         Cambiar contraseña
       </Button>
+
+      {sweetAlerVisible && <SweetAlert/>}
+
     </View>
   );
 };

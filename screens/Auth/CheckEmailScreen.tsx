@@ -11,7 +11,7 @@ export default function CheckEmailScreen({ navigation }) {
   const [sweetAlerOpen, setSweetAlerOpen] = useState(false);
   const [titleAlert, setTitleAlert] = useState('');
   const [textAlert, setTextAlert] = useState('');
-  const [typeAlert, setTypeAlert] = useState('');
+  const [typeAlert, setTypeAlert] = useState(null);
   const [confirminButtonText, setConfirminButtonText] = useState('Enviar');
   const [showCancelButton, setShowCancelButton] = useState(true);
 
